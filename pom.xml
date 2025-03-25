@@ -54,15 +54,10 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<!--Spring AI: Integración con Azure OpenAI-->
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.ai</groupId>-->
-<!--			<artifactId>spring-ai-azure-openai-spring-boot-starter</artifactId>-->
-<!--		</dependency>-->
+
+
 		<!--Spring AI: Permite almacenar embeddings en Elasticsearch-->
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-elasticsearch-store-spring-boot-starter</artifactId>
-		</dependency>
+
 
 		<!--Spring Cloud OpenFeign: Cliente HTTP declarativo-->
 		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign -->
