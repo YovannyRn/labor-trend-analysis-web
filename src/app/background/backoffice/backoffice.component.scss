@@ -1,0 +1,95 @@
+.dashboard-container {
+    padding: 2rem;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f7f9fc;
+    color: #1f1f1f;
+  
+    .title {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+  
+    .kpi-grid {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+  
+      .kpi-card {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        padding: 1rem;
+        flex: 1 1 200px;
+        text-align: center;
+  
+        h3 {
+          font-size: 1rem;
+          margin-bottom: 0.5rem;
+        }
+  
+        p {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: #007acc;
+        }
+      }
+    }
+  
+    .charts-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    
+      .chart-card {
+        background: white;
+        padding: 1rem;
+        border-radius: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+    }
+  
+    .reports-section {
+      background: white;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  
+      ul {
+        padding-left: 1rem;
+        list-style: disc;
+      }
+  
+      li {
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
+
+.backoffice-container {
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f7f9fc;
+  color: #1f1f1f;
+
+  .charts-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas iguales */
+    gap: 2rem; /* Espacio entre las gráficas */
+    margin-bottom: 2rem;
+  }
+
+  .chart-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+}

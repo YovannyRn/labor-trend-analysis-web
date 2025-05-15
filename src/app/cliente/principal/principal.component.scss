@@ -1,0 +1,218 @@
+.video-container {
+  position: relative;
+  width: 100%;
+  height: 90vh;
+  overflow: hidden;
+}
+
+#video1 {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: rgba(0, 0, 0, 0);
+  object-position: 50% 50%;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+  z-index: 1; /* Capa por encima del video */
+}
+
+#texto-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  z-index: 2; /* Asegúrate de que esté por encima del degradado */
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+#botones-video {
+  position: absolute;
+  margin-top: 50px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  z-index: 2; /* Asegúrate de que los botones estén encima del video y el degradado */
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+#boton1 {
+  margin-right: 10px;
+  border-radius: 3rem;
+  height: 3rem;
+  width: 10rem;
+  color: azure;
+  background-color: black;
+  border: 2px solid rgb(20, 20, 20);
+  animation: glow 2s infinite ease-in-out;
+  transition: 3s;
+}
+
+#boton1:hover {
+  background-color: rgb(19, 140, 173);
+  border-color: aqua;
+}
+
+#boton2 {
+  margin-left: 10px;
+  border-radius: 3rem;
+  height: 3rem;
+  width: 10rem;
+  color: azure;
+  background-color: black;
+  border: 2px solid rgb(20, 20, 20);
+  transition: 3s;
+}
+
+#boton2:hover {
+  background-color: rgb(32, 32, 32);
+}
+
+#menu {
+  
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  background-color: rgb(0, 0, 0);
+}
+
+#menu ul {
+  display: inline-flex;
+  animation: scrollLeft 20s linear infinite;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#menu li {
+  margin: 0 4rem;
+  font-size: 1.5rem;
+  color: rgb(255, 255, 255);
+  white-space: nowrap;
+}
+
+@keyframes scrollLeft {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes glow {
+  0% {
+    filter: drop-shadow(0px 0px 20px rgba(45, 148, 233, 0.5));
+  }
+  50% {
+    filter: drop-shadow(0px 0px 40px rgb(47, 150, 229));
+  }
+  100% {
+    filter: drop-shadow(0px 0px 20px rgba(44, 157, 233, 0.5));
+  }
+}
+
+/*html, body {
+    height: 100dvh;  // Ocupa el 100% de la pantalla
+    margin: 0;
+    margin-top: -95px;
+    padding: 0;
+    background-color: #1d2129; // Fondo oscuro
+    color: white;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .container-fluid {
+    flex: 1; // Permite que el contenido crezca y ocupe el espacio disponible
+  }
+  
+  .row {
+    height: 100%; // Hace que la fila ocupe toda la pantalla
+  }
+  
+  .search-bar {
+    width: 80%;
+    background-color: #39BCDC;
+    border-radius: 50px;
+    padding: 5px;
+  }
+
+  @keyframes glow {
+    0% { filter: drop-shadow(0px 0px 10px rgba(57, 188, 220, 0.5)); }
+    50% { filter: drop-shadow(0px 0px 20px rgba(57, 188, 220, 1)); }
+    100% { filter: drop-shadow(0px 0px 10px rgba(57, 188, 220, 0.5)); }
+}
+
+#logo-grande {
+    filter: drop-shadow(0px 0px 15px rgba(57, 188, 220, 0.8));
+    animation: glow 1.5s infinite alternate;
+}
+
+  // carrousel 
+
+  .col-md-6 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;  // Aseguramos que ocupe todo el espacio disponible
+  }
+  
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;  // Dos columnas
+    grid-template-rows: 1fr 1fr;     // Dos filas
+    gap: 20px;
+    max-width: 800px;  // Limita el ancho máximo
+    width: 100%;
+  }
+  
+  .large-box {
+    grid-column: span 2;  // El cuadro grande ocupa las dos columnas
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    height: 100%;
+  }
+  
+  .small-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    height: 100%;
+  }
+  
+  .large-box img, .small-box img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  .large-box p, .small-box p {
+    color: white;
+    font-size: 16px;
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 5px;
+  }
+  */

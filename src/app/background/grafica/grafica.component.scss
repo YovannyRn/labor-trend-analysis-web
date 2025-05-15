@@ -1,0 +1,32 @@
+.chart-container {
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffffff, #e6e6e6);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  max-width: 1000px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  ngx-charts-bar-vertical-2d {
+    width: 100%;
+    height: 100%;
+    animation: fadeIn 1s ease-in-out;
+  }
+}
+
+/* Animación de fade-in para la gráfica */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

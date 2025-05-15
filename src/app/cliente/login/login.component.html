@@ -1,0 +1,19 @@
+<body>
+  <div *ngIf="isLoading">
+    <app-pantallazo></app-pantallazo> <!-- Pantalla de carga -->
+  </div>
+
+  <div *ngIf="!isLoading" class="login-container">
+    <div class="form-box">
+      <form>
+        <h2>Iniciar Sesión</h2>
+        <input type="text" name="username" placeholder="Usuario" formControlName="username" required>
+        <input type="password" name="password" placeholder="Contraseña" formControlName="password" required>
+        <button type="button" (click)="Layout()">Entrar</button>
+        <p>¿No tienes cuenta? 
+          <button type="button" class="btn-link" (click)="Registro()">Regístrate</button>
+        </p>
+      </form>
+    </div>
+  </div>
+</body>

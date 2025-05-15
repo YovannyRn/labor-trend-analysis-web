@@ -1,0 +1,24 @@
+<body>
+  <div class="register-container">
+    <div class="form-box">
+      <form>
+        <h2>Registrarme</h2>
+        <input type="text" placeholder="Usuario" formControlName="username" required>
+        <input type="password" placeholder="Contraseña" formControlName="password" required>
+        <select formControlName="roleName" required>
+          <option value="">--ROL--</option>
+          <option value="ADMIN">Administrador</option>
+          <option value="CLIENT">Cliente</option>
+          <option value="SELLER">Vendedor</option>
+        </select>
+        <input type="text" placeholder="Nombre" formControlName="firstName" required>
+        <input type="text" placeholder="Apellidos" formControlName="lastName" required>
+        <input type="text" placeholder="Dirección" formControlName="address" required>
+        <button type="submit">Finalizar Registro</button>
+        <p>¿Ya tienes cuenta? 
+          <button type="button" class="btn-link" (click)="Login()">Inicia Sesión</button>
+        </p>
+      </form>
+    </div>
+  </div>
+</body>
