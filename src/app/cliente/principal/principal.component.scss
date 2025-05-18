@@ -1,7 +1,9 @@
 .video-container {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 90vh;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -20,7 +22,7 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
-  z-index: 1; /* Capa por encima del video */
+  z-index: 1;
 }
 
 #texto-video {
@@ -80,11 +82,12 @@
 }
 
 #menu {
-  
+  position: absolute;
   overflow: hidden;
+  bottom: 5%;
   white-space: nowrap;
   width: 100%;
-  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
 }
 
 #menu ul {
@@ -93,6 +96,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  width: 90%;
 }
 
 #menu li {

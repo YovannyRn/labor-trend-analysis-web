@@ -20,8 +20,8 @@ export class GraficaCComponent {
     name: 'custom',
     selectable: true,
     group: ScaleType.Ordinal,
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'] // Colores para cada sector
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'] 
   };
 
-  legendPosition: LegendPosition = LegendPosition.Below; // Posición de la leyenda
+
 }
