@@ -50,7 +50,8 @@ public class SecurityConfig {
                                 "/users",
                                 "/users/register",
                                 "/users/check-token",
-                                "/user-info/{userId}"
+                                "/user-info/{userId}",
+                                "/n8n/process"
                         )
                         .permitAll()
                         .anyRequest()
