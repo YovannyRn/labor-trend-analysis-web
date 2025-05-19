@@ -16,8 +16,10 @@ export const routes: Routes = [
     },
     //backoffice
     {
-        path: "back", component: LayoutBackComponent, children: [
-            { path: "", component: MenuBackComponent},
+        path: "app", component: LayoutBackComponent, children: [
+            
+            {path: "", redirectTo: "control-panel", pathMatch: "full"},
+            {path: "control-panel", component: MenuBackComponent},
         ]
     }
 ];
