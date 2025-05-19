@@ -8,6 +8,7 @@ import com.tedencia_laboral.models.User;
 import com.tedencia_laboral.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping("/users")
 @CrossOrigin("*")
 public class UserController {
+
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -54,4 +56,7 @@ public class UserController {
     public ResponseEntity<Boolean> checkToken(@RequestBody CheckTokenRequest checkTokenRequest) {
         return ResponseEntity.ok(this.userService.checkToken(checkTokenRequest));
     }
+
+
+
 }
