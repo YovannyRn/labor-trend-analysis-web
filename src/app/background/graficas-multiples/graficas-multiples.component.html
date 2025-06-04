@@ -1,0 +1,152 @@
+<!-- Contenedor Principal de Gráficas Múltiples -->
+<div class="multiple-charts-container">
+  <!-- Header con botón de cerrar -->
+  <div class="charts-header">
+    <h3 class="charts-title">📊 Análisis Completo del Mercado Laboral</h3>
+    <button
+      class="btn-close"
+      (click)="closeCharts()"
+      aria-label="Cerrar gráficas"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <!-- Grid de Gráficas -->
+  <div class="charts-grid">
+    <!-- 1. Salarios por Nivel de Experiencia -->
+    <div class="chart-panel salary-levels" *ngIf="salaryByLevelData.length > 0">
+      <div class="chart-header">
+        <h4>💼 Salarios por Experiencia</h4>
+        <p class="chart-subtitle">Comparación salarial por nivel profesional</p>
+      </div>
+      <div class="chart-content">
+        <ngx-charts-bar-vertical
+          [results]="salaryByLevelData"
+          [view]="[380, 300]"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'Nivel de Experiencia'"
+          [yAxisLabel]="'Salario (COP)'"
+          [scheme]="salaryLevelColorScheme"
+          [legend]="false"
+          [showGridLines]="true"
+          [roundDomains]="true"
+          [tooltipDisabled]="false"
+          [yAxisTickFormatting]="formatCurrency"
+        >
+        </ngx-charts-bar-vertical>
+      </div>
+    </div>
+
+    <!-- 2. Distribución Salarial por Región -->
+    <div
+      class="chart-panel salary-regions"
+      *ngIf="salaryByRegionData.length > 0"
+    >
+      <div class="chart-header">
+        <h4>🗺️ Salarios por Región</h4>
+        <p class="chart-subtitle">Distribución geográfica de salarios</p>
+      </div>
+      <div class="chart-content">
+        <ngx-charts-pie-chart
+          [results]="salaryByRegionData"
+          [view]="[380, 300]"
+          [legend]="true"
+          [scheme]="regionColorScheme"
+          [tooltipDisabled]="false"
+          [doughnut]="false"
+          [arcWidth]="0.4"
+          [labelFormatting]="formatTooltip"
+        >
+        </ngx-charts-pie-chart>
+      </div>
+    </div>
+    <!-- 3. Habilidades Mejor Pagadas -->
+    <div class="chart-panel skills-chart" *ngIf="skillsData.length > 0">
+      <div class="chart-header">
+        <h4>🛠️ Habilidades Mejor Pagadas</h4>
+        <p class="chart-subtitle">
+          Tecnologías con mayor remuneración ({{ skillsData.length }} items)
+        </p>
+      </div>
+      <div class="chart-content">
+        <ngx-charts-bar-horizontal
+          [results]="skillsData"
+          [view]="[380, 300]"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'Salario Promedio (COP)'"
+          [yAxisLabel]="'Tecnologías'"
+          [scheme]="skillsColorScheme"
+          [legend]="false"
+          [showGridLines]="true"
+          [roundDomains]="true"
+          [tooltipDisabled]="false"
+          [xAxisTickFormatting]="formatCurrency"
+        >
+        </ngx-charts-bar-horizontal>
+      </div>
+    </div>
+    <!-- 4. Panel de Tendencias e Información -->
+    <div
+      class="chart-panel trends-panel"
+      *ngIf="trendsInfo && hasKeys(trendsInfo)"
+    >
+      <div class="chart-header">
+        <h4>📈 Tendencias del Mercado</h4>
+        <p class="chart-subtitle">Análisis y proyecciones laborales</p>
+      </div>
+      <div class="trends-content">
+        <!-- Factores de Incremento -->
+        <div class="trend-section" *ngIf="trendsInfo.factores_incremento">
+          <h5>🚀 Factores de Crecimiento</h5>
+          <ul class="factors-list">
+            <li
+              *ngFor="let factor of trendsInfo.factores_incremento"
+              class="factor-item"
+            >
+              <i class="fas fa-arrow-up text-success"></i>
+              {{ factor }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- Demanda del Mercado -->
+        <div class="trend-section" *ngIf="trendsInfo.demanda_mercado">
+          <h5>📊 Demanda Actual</h5>
+          <div class="demand-info">
+            <i class="fas fa-chart-line text-primary"></i>
+            <span class="demand-text">{{ trendsInfo.demanda_mercado }}</span>
+          </div>
+        </div>
+
+        <!-- Proyección 2025 -->
+        <div class="trend-section" *ngIf="trendsInfo.proyeccion_2025">
+          <h5>🔮 Proyección 2025</h5>
+          <div class="projection-info">
+            <i class="fas fa-crystal-ball text-warning"></i>
+            <span class="projection-text">{{
+              trendsInfo.proyeccion_2025
+            }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje si no hay datos -->
+  <div
+    *ngIf="
+      salaryByLevelData.length === 0 &&
+      salaryByRegionData.length === 0 &&
+      skillsData.length === 0
+    "
+    class="no-data-message"
+  >
+    <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+    <h5>No hay datos disponibles para mostrar</h5>
+    <p class="text-muted">
+      Los datos de gráficas múltiples no están disponibles en este momento.
+    </p>
+  </div>
+</div>

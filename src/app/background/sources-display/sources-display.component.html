@@ -1,0 +1,63 @@
+<div class="sources-container">
+  <div
+    class="sources-header d-flex justify-content-between align-items-center mb-3"
+  >
+    <h5 class="text-light mb-0">
+      <i class="bi bi-link-45deg me-2"></i>
+      {{ title }}
+      <span class="badge bg-primary ms-2">{{ sources.length }}</span>
+    </h5>
+  </div>
+
+  <div class="sources-list" *ngIf="sources.length > 0">
+    <div
+      *ngFor="let source of sources; let i = index"
+      class="source-item mb-3 p-3 bg-dark bg-opacity-50 rounded-3 border-start border-info border-3"
+    >
+      <div class="d-flex align-items-start gap-3">
+        <!-- Número de fuente -->
+        <span
+          class="badge bg-info text-dark fw-bold fs-6 rounded-circle d-flex align-items-center justify-content-center"
+          style="min-width: 2rem; height: 2rem"
+        >
+          {{ i + 1 }}
+        </span>
+        <!-- Contenido de la fuente -->
+        <div class="flex-grow-1">
+          <!-- Nombre de la organización con color destacado -->
+          <div class="source-name fw-bold mb-2">
+            {{ getOrganizationName(source) }}
+          </div>
+
+          <!-- URLs individuales con iconos -->
+          <div
+            class="source-urls mt-2 "
+            *ngIf="getSourceUrls(source).length > 0"
+          >
+            <div
+              *ngFor="let url of getSourceUrls(source)"
+              class="d-flex align-items-center mb-1"
+            >
+              <i class="bi bi-link-external me-2"></i>
+              <a
+                [href]="url"
+                target="_blank"
+                class="text-primary text-decoration-none hover-underline small"
+              >
+                {{ url }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensaje cuando no hay fuentes -->
+  <div *ngIf="sources.length === 0" class="no-sources text-center py-4">
+    <i class="bi bi-info-circle text-muted fs-1 mb-3"></i>
+    <p class="text-muted mb-0">
+      No se encontraron fuentes específicas para esta consulta.
+    </p>
+  </div>
+</div>

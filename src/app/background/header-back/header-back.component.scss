@@ -1,67 +1,237 @@
 .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #1e1e2f;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+  .logo {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 1rem 2rem;
-    background: #1e1e2f;
-    color: white;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-  
-      img {
-        height: 40px;
-      }
-  
-      span {
-        font-size: 1.3rem;
-        font-weight: bold;
+    gap: 0.5rem;
+
+    img {
+      height: 40px;
+    }
+
+    span {
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+  }
+
+  .nav {
+    display: flex;
+    gap: 1.5rem;
+
+    a {
+      color: #bbb;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+
+      &.active,
+      &:hover {
+        color: #ffffff;
       }
     }
-  
-    .nav {
-      display: flex;
-      gap: 1.5rem;
-  
-      a {
-        color: #bbb;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.2s ease;
-  
-        &.active,
+  }
+  .user-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+
+    .username {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .user-icon-container {
+      position: relative;
+
+      .user-icon {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1001;
+
         &:hover {
-          color: #ffffff;
+          background: #c0392b !important;
+          transform: scale(1.05);
+        }
+      }
+
+      .user-popup {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        background: white;
+        color: #333;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        width: 320px;
+        z-index: 1002;
+        overflow: hidden;
+        animation: slideDown 0.3s ease;
+
+        .popup-header {
+          background: #1e1e2f;
+          color: white;
+          padding: 1rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          h5 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+          }
+
+          .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            transition: opacity 0.3s ease;
+
+            &:hover {
+              opacity: 0.7;
+            }
+          }
+        }
+
+        .popup-content {
+          padding: 1.5rem;
+
+          .user-avatar {
+            text-align: center;
+            margin-bottom: 1rem;
+
+            i {
+              font-size: 3rem;
+              color: #e74c3c;
+            }
+          }
+
+          .user-details {
+            .detail-item {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 0.8rem;
+              padding-bottom: 0.5rem;
+              border-bottom: 1px solid #f0f0f0;
+
+              &:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+              }
+
+              label {
+                font-weight: 600;
+                color: #555;
+                font-size: 0.9rem;
+              }
+
+              span {
+                color: #333;
+                font-size: 0.9rem;
+                text-align: right;
+                word-break: break-word;
+                max-width: 200px;
+              }
+            }
+          }
+        }
+
+        .popup-loading {
+          padding: 2rem;
+          text-align: center;
+          color: #666;
+
+          .spinner {
+            margin-bottom: 0.5rem;
+
+            i {
+              font-size: 1.5rem;
+              animation: spin 1s linear infinite;
+            }
+          }
+
+          span {
+            font-size: 0.9rem;
+          }
         }
       }
     }
-  
-    .user-actions {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-  
-      .username {
-        font-size: 0.9rem;
-        opacity: 0.8;
+
+    .logout-btn {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background: #c0392b;
       }
-  
-      .logout-btn {
-        background: #e74c3c;
-        color: white;
-        border: none;
-        padding: 0.4rem 0.8rem;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background 0.3s ease;
-  
-        &:hover {
-          background: #c0392b;
+    }
+  }
+}
+
+// Overlay para cerrar popup al hacer clic fuera
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+// Animaciones
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem;
+
+    .user-actions {
+      .user-icon-container {
+        .user-popup {
+          width: 280px;
+          right: -50px;
         }
       }
     }
   }
-  
+}

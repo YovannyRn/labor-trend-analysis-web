@@ -1,22 +1,89 @@
 <body>
   <div class="register-container">
     <div class="form-box">
-      <form>
-        <h2>Registrarme</h2>
-        <input type="text" placeholder="Usuario" formControlName="username" required>
-        <input type="password" placeholder="Contraseña" formControlName="password" required>
-        <select formControlName="roleName" required>
-          <option value="">--ROL--</option>
-          <option value="ADMIN">Administrador</option>
-          <option value="CLIENT">Cliente</option>
-          <option value="SELLER">Vendedor</option>
-        </select>
-        <input type="text" placeholder="Nombre" formControlName="firstName" required>
-        <input type="text" placeholder="Apellidos" formControlName="lastName" required>
-        <input type="text" placeholder="Dirección" formControlName="address" required>
-        <button type="submit">Finalizar Registro</button>
-        <p>¿Ya tienes cuenta? 
-          <button type="button" class="btn-link" (click)="Login()">Inicia Sesión</button>
+      <!-- From Uiverse.io by micaelgomestavares -->
+      <form class="form" [formGroup]="registerForm" (ngSubmit)="submit()">
+        <p class="title">Register</p>
+        <p class="message">Signup now and get full access to our app.</p>
+        <div class="flex">
+          <label>
+            <input
+              class="input"
+              type="text"
+              placeholder=""
+              formControlName="username"
+              required
+            />
+            <span>username</span>
+          </label>
+          <label>
+            <input
+              class="input"
+              type="text"
+              placeholder=""
+              formControlName="firstName"
+              required
+            />
+            <span>FirstName</span>
+          </label>
+          <label>
+            <input
+              class="input"
+              type="text"
+              placeholder=""
+              formControlName="lastName"
+              required
+            />
+            <span>LastName</span>
+          </label>
+        </div>
+
+        <label>
+          <input
+            class="input"
+            type="email"
+            placeholder=""
+            formControlName="address"
+            required
+          />
+          <span>Email</span>
+        </label>
+
+        <label>
+          <input
+            class="input"
+            type="password"
+            placeholder=""
+            formControlName="password"
+            required
+          />
+          <span>Password</span>
+        </label>
+        <label>
+          <input
+            class="input"
+            type="password"
+            placeholder=""
+            formControlName="confirmPassword"
+            required
+          />
+          <span>Confirm password</span>
+        </label>
+        <div
+          *ngIf="
+            registerForm.errors?.['passwordMismatch'] &&
+            registerForm.get('confirmPassword')?.touched
+          "
+          class="text-danger mb-2"
+          style="font-size: 0.9em"
+        >
+          Las contraseñas no coinciden.
+        </div>
+        <button class="submit" type="submit" >
+          Submit
+        </button>
+        <p class="signin">
+          Already have an account? <a routerLink="/login">Signin</a>
         </p>
       </form>
     </div>

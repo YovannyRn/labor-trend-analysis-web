@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://localhost:5678/webhook-test/process-user-request',
+    apiUrl: 'http://localhost:8080/api',
     tokenSecure: true
 };

@@ -1,0 +1,331 @@
+/* Contenedor Principal */
+.multiple-charts-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Header de las gráficas */
+.charts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.charts-title {
+  color: #2c3e50;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+ .header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-close {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+
+  &:hover {
+    background: #c0392b;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+  }
+}
+
+/* Grid de Gráficas */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-bottom: 20px;
+}
+
+/* Paneles individuales */
+.chart-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid #e1e8ed;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Headers de cada gráfica */
+.chart-header {
+  margin-bottom: 15px;
+  text-align: center;
+
+  h4 {
+    color: #34495e;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+  }
+
+  .chart-subtitle {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin: 0;
+    font-style: italic;
+  }
+}
+
+/* Contenido de gráficas */
+.chart-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+}
+
+/* Estilos específicos para paneles */
+.salary-levels {
+  border-left: 4px solid #2ecc71;
+}
+
+.salary-regions {
+  border-left: 4px solid #3498db;
+}
+
+.skills-chart {
+  border-left: 4px solid #9b59b6;
+}
+
+.trends-panel {
+  border-left: 4px solid #f39c12;
+}
+
+/* Panel de Tendencias */
+.trends-content {
+  padding: 10px;
+}
+
+.trend-section {
+  margin-bottom: 20px;
+
+  h5 {
+    color: #2c3e50;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+/* Lista de factores */
+.factors-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  .factor-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #ecf0f1;
+    font-size: 0.9rem;
+    color: #34495e;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    i {
+      font-size: 0.8rem;
+    }
+  }
+}
+
+/* Información de demanda y proyección */
+.demand-info,
+.projection-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid;
+
+  .demand-text,
+  .projection-text {
+    font-size: 0.9rem;
+    color: #2c3e50;
+    line-height: 1.4;
+  }
+}
+
+.demand-info {
+  border-left-color: #3498db;
+}
+
+.projection-info {
+  border-left-color: #f39c12;
+}
+
+/* Mensaje sin datos */
+.no-data-message {
+  text-align: center;
+  padding: 60px 20px;
+  color: #7f8c8d;
+
+  h5 {
+    margin: 0 0 10px 0;
+    color: #95a5a6;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .chart-content {
+    min-height: 250px;
+  }
+
+  .charts-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .multiple-charts-container {
+    padding: 15px;
+    margin: 10px;
+  }
+
+  .charts-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .charts-title {
+    font-size: 1.3rem;
+  }
+
+  .chart-panel {
+    padding: 15px;
+  }
+
+  .chart-content {
+    min-height: 200px;
+  }
+
+  .chart-header h4 {
+    font-size: 1.1rem;
+  }
+
+  .chart-subtitle {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .multiple-charts-container {
+    padding: 10px;
+    margin: 5px;
+  }
+
+  .charts-title {
+    font-size: 1.1rem;
+  }
+
+  .chart-panel {
+    padding: 12px;
+  }
+
+  .trend-section h5 {
+    font-size: 0.9rem;
+  }
+
+  .factor-item,
+  .demand-text,
+  .projection-text {
+    font-size: 0.8rem;
+  }
+}
+
+/* Mejoras adicionales para ngx-charts */
+::ng-deep {
+  .ngx-charts {
+    .tooltip-anchor {
+      fill: rgba(0, 0, 0, 0.8);
+    }
+
+    .bar {
+      transition: all 0.3s ease;
+    }
+
+    .bar:hover {
+      opacity: 0.8;
+    }
+
+    .pie-slice {
+      transition: all 0.3s ease;
+    }
+
+    .pie-slice:hover {
+      transform: scale(1.05);
+    }
+
+    .legend {
+      font-size: 12px;
+    }
+
+    .legend-label {
+      color: #34495e;
+    }
+  }
+}

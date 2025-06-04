@@ -1,0 +1,233 @@
+.chat-container {
+  height: calc(100vh - 72px);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
+    Helvetica, Arial, sans-serif;
+}
+
+// Logo gradient effect
+.text-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// Avatar gradient
+.bg-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+// State transitions
+.initial-state {
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 10;
+
+  &.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(-30px) !important;
+  }
+}
+
+.chat-state {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  &.visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+  }
+}
+
+// Hide scrollbars while keeping scroll functionality
+.chat-messages {
+  scroll-behavior: smooth;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+}
+
+// Textarea auto-resize and scrollbar hiding
+.chat-textarea,
+.chat-textarea-small {
+  min-height: 56px;
+  max-height: 120px;
+  resize: none;
+  padding-right: 4rem !important;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &::placeholder {
+    color: #6c757d !important;
+  }
+}
+
+.chat-textarea {
+  font-size: 1.1rem;
+  padding: 1.2rem 4rem 1.2rem 1.8rem !important;
+}
+
+// Send button positioning and animations
+.send-button,
+.send-button-small {
+  width: 44px;
+  height: 44px;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-50%) scale(1.05) !important;
+  }
+
+  &.send-anim {
+    transform: translateY(-50%) scale(0.95) rotate(-5deg) !important;
+  }
+}
+
+.send-button-small {
+  width: 40px;
+  height: 40px;
+}
+
+// Typing indicator animation
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  background: #0d6efd;
+  border-radius: 50%;
+  animation: typing 1.4s infinite ease-in-out both;
+
+  &:nth-child(1) {
+    animation-delay: -0.32s;
+  }
+  &:nth-child(2) {
+    animation-delay: -0.16s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0s;
+  }
+}
+
+@keyframes typing {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// Button hover effects
+.btn {
+  transition: all 0.2s ease !important;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+}
+
+// Backdrop blur effect
+.chat-header,
+.chat-input-container {
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem 1.5rem 0.5rem 1.5rem !important;
+}
+
+// Message styling improvements
+.message-content {
+  font-size: 1.1rem;
+  line-height: 1.6;
+
+  b {
+    color: #58a6ff;
+    font-weight: 600;
+  }
+}
+
+.user-message .message-content {
+  border-radius: 1.5rem 1.5rem 0.5rem 1.5rem !important;
+  margin-right: 10%;
+}
+
+.bot-message .message-content {
+  margin-right: 10%px;
+}
+
+// Estilos para componentes de datos
+.sources-container {
+  max-width: 800px;
+  margin: 0 auto;
+
+  .sources-list {
+    max-height: 400px;
+    overflow-y: auto;
+
+    .source-item {
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        border-left-color: #ffc107;
+        transform: translateX(5px);
+      }
+    }
+  }
+}
+
+// Estilos para botones de prueba (solo en desarrollo)
+.test-actions {
+  .btn {
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+  }
+}
+
+// Mejoras visuales para el componente de gráfica
+.w-75 {
+  .btn-outline-secondary {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .welcome-content {
+    padding: 0 1rem !important;
+  }
+
+  .text-gradient {
+    font-size: 2.5rem !important;
+  }
+
+  .message {
+    max-width: 100% !important;
+  }
+
+  .quick-actions .btn {
+    font-size: 0.8rem !important;
+    padding: 0.5rem 1rem !important;
+  }
+}
