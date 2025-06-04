@@ -14,13 +14,15 @@ export class N8nService {
     private http: HttpClient,
     private tokenService: TokenService,
     private useStateService: UseStateService
-  ) {} // Método principal para enviar mensajes
+  ) {} // Método principal para enviar mensajes - ACTUALIZADO para usar n8n directamente
   async sendMessage(
     message: string,
     requestType: 'chat' | 'graph' | 'sources' = 'chat'
   ): Promise<N8nResponse> {
     console.log('📤 Enviando mensaje:', { message, requestType });
-    console.log(`🌐 URL del endpoint: ${environment.apiUrl}/n8n/process`);
+    console.log(
+      `🌐 URL del webhook n8n: http://localhost:5678/webhook/process-user-request`
+    );
 
     const request: N8nRequest = {
       userId: this.getCurrentUserId(),
@@ -33,32 +35,37 @@ export class N8nService {
 
     try {
       const startTime = Date.now();
-      console.log('⏱️ Iniciando petición HTTP...');
+      console.log('⏱️ Iniciando petición HTTP directa a n8n...');
 
-      const backendResponse = await this.http
-        .post<N8nResponse>(`${environment.apiUrl}/n8n/process`, request)
+      // Llamar directamente al webhook de n8n
+      const n8nResponse = await this.http
+        .post<N8nResponse>(
+          'http://localhost:5678/webhook/process-user-request',
+          request
+        )
         .toPromise();
 
       const duration = Date.now() - startTime;
       console.log(`⏱️ Petición completada en ${duration}ms`);
-      console.log('🔗 Respuesta raw del backend:', backendResponse);
+      console.log('🔗 Respuesta raw de n8n:', n8nResponse);
       console.log(
         '📏 Tamaño de respuesta:',
-        JSON.stringify(backendResponse).length,
+        JSON.stringify(n8nResponse).length,
         'caracteres'
       );
+      if (!n8nResponse) {
+        console.error('❌ n8n response es null/undefined');
+        throw new Error('No se recibió respuesta de n8n');
+      }
 
-      if (!backendResponse) {
-        console.error('❌ Backend response es null/undefined');
-        throw new Error('No se recibió respuesta del backend');
-      } // Análisis detallado de la respuesta
+      // Análisis detallado de la respuesta
       if (
-        (typeof backendResponse.message === 'string' &&
-          (backendResponse.message.includes('Respuesta vacía') ||
-            backendResponse.message.trim() === '')) ||
-        (typeof backendResponse.output === 'string' &&
-          (backendResponse.output.includes('Respuesta vacía') ||
-            backendResponse.output.trim() === ''))
+        (typeof n8nResponse.message === 'string' &&
+          (n8nResponse.message.includes('Respuesta vacía') ||
+            n8nResponse.message.trim() === '')) ||
+        (typeof n8nResponse.output === 'string' &&
+          (n8nResponse.output.includes('Respuesta vacía') ||
+            n8nResponse.output.trim() === ''))
       ) {
         console.error('⚠️ DETECTADO: Respuesta vacía de n8n');
         console.error(
@@ -69,10 +76,7 @@ export class N8nService {
         );
       }
 
-      const mappedResponse = this.mapBackendResponse(
-        backendResponse,
-        requestType
-      );
+      const mappedResponse = this.mapBackendResponse(n8nResponse, requestType);
       console.log('✅ Respuesta mapeada final:', mappedResponse);
 
       return mappedResponse;

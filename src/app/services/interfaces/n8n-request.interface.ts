@@ -8,9 +8,10 @@ export interface N8nRequest {
 export interface N8nResponse {
   success?: boolean;
   response_type?: 'text' | 'salary_data' | 'sector_growth' | 'sources_info';
-  message?: string; 
-  structured_data?: any; 
+  message?: string;
+  structured_data?: any;
   sources?: string[];
   fuentes_utilizadas?: string[];
   output?: string;
+  queryId?: number; // ID del registro creado en la base de datos
 }
