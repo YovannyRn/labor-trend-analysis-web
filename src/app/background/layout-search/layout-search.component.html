@@ -1,43 +1,69 @@
 <!-- Container principal que ocupa toda la pantalla -->
 <div
-  class="chat-container bg-dark text-white position-relative overflow-hidden"
-  [ngClass]="{ 'chat-mode': isChatMode, 'initial-mode': !isChatMode }"
+  class="chat-container bg-dark text-white position-relative overflow-hidden d-flex"
+  [ngClass]="{
+    'chat-mode': isChatMode,
+    'initial-mode': !isChatMode,
+    'sidebar-visible': showSidebar
+  }"
 >
-  <!-- Estado inicial: Input centrado -->
+  <!-- Sidebar de chat -->
   <div
-    class="initial-state position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-    [ngClass]="{ hidden: isChatMode }"
+    class="sidebar-container position-relative"
+    [ngClass]="{
+      'sidebar-collapsed': isSidebarCollapsed,
+      'sidebar-hidden': !showSidebar
+    }"
+    *ngIf="showSidebar"
   >
-    <div class="welcome-content w-100 text-center" style="max-width: 700px">
-      <div class="logo-section mb-5">
-        <h1 class="display-2 fw-light text-gradient mb-3">WorkNav</h1>
-        <p class="fs-4 text-secondary fw-normal">
-          Análisis de tendencias del mercado laboral
-        </p>
-      </div>
+    <app-sidebar-chat
+      [isCollapsed]="isSidebarCollapsed"
+      (sidebarToggled)="onSidebarToggled($event)"
+      (sessionSelected)="onSessionChanged($event)"
+      (newChatRequested)="onNewSession()"
+    ></app-sidebar-chat>
+  </div>
 
-      <div class="input-section">
-        <div class="position-relative">
-          <textarea
-            class="form-control chat-textarea bg-secondary border-secondary text-white rounded-pill"
-            placeholder="¿Qué tendencias del mercado laboral te interesa analizar?"
-            [(ngModel)]="searchText"
-            (keydown.enter)="handleEnter($event)"
-            (input)="autoResize($event)"
-            rows="1"
-            autocomplete="off"
-          ></textarea>
-          <button
-            type="button"
-            class="btn btn-light rounded-circle send-button position-absolute top-50 end-0 translate-middle-y me-2"
-            (click)="sendSearchWithAnimation()"
-            [disabled]="!searchText.trim() || loading"
-            [ngClass]="{ 'send-anim': sendAnimating }"
-          >
-            <i class="bi bi-arrow-up"></i>
-          </button>
+  <!-- Contenido principal -->
+  <div
+    class="main-content flex-grow-1 position-relative overflow-hidden"
+    [ngClass]="{ 'with-sidebar': showSidebar && !isSidebarCollapsed }"
+  >
+    <!-- Estado inicial: Input centrado -->
+    <div
+      class="initial-state position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+      [ngClass]="{ hidden: isChatMode }"
+    >
+      <div class="welcome-content w-100 text-center" style="max-width: 700px">
+        <div class="logo-section mb-5">
+          <h1 class="display-2 fw-light text-gradient mb-3">WorkNav</h1>
+          <p class="fs-4 text-secondary fw-normal">
+            Análisis de tendencias del mercado laboral
+          </p>
         </div>
-        <!-- <div
+
+        <div class="input-section">
+          <div class="position-relative">
+            <textarea
+              class="form-control chat-textarea bg-secondary border-secondary text-white rounded-pill"
+              placeholder="¿Qué tendencias del mercado laboral te interesa analizar?"
+              [(ngModel)]="searchText"
+              (keydown.enter)="handleEnter($event)"
+              (input)="autoResize($event)"
+              rows="1"
+              autocomplete="off"
+            ></textarea>
+            <button
+              type="button"
+              class="btn btn-light rounded-circle send-button position-absolute top-50 end-0 translate-middle-y me-2"
+              (click)="sendSearchWithAnimation()"
+              [disabled]="!searchText.trim() || loading"
+              [ngClass]="{ 'send-anim': sendAnimating }"
+            >
+              <i class="bi bi-arrow-up"></i>
+            </button>
+          </div>
+          <!-- <div
           class="quick-actions d-flex gap-2 justify-content-center flex-wrap mt-4"
         >
           <button
@@ -74,174 +100,171 @@
           </button>
         </div> -->
 
-        <div
-          *ngIf="loading"
-          class="d-flex align-items-center justify-content-center text-secondary mt-3"
-        >
           <div
-            class="spinner-border spinner-border-sm text-white me-2"
-            role="status"
-          ></div>
-          <span class="text-white">Analizando...</span>
+            *ngIf="loading"
+            class="d-flex align-items-center justify-content-center text-secondary mt-3"
+          >
+            <div
+              class="spinner-border spinner-border-sm text-white me-2"
+              role="status"
+            ></div>
+            <span class="text-white">Analizando...</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Estado de chat: Conversación completa -->
-  <div class="w-100 h-100 justify-content-center">
-    <div
-      class="chat-state w-75 m-auto h-100 d-flex flex-column"
-      [ngClass]="{ visible: isChatMode }"
-    >
-      <!-- Historial de mensajes -->
-      <div class="chat-messages flex-grow-1 overflow-auto p-4">
-        <div
-          class="message-container mb-4"
-          *ngFor="let msg of chatHistory; let i = index"
-        >
-          <!-- Mensaje del usuario -->
+    <!-- Estado de chat: Conversación completa -->
+    <div class="w-100 h-100 justify-content-center">
+      <div
+        class="chat-state w-75 m-auto h-100 d-flex flex-column"
+        [ngClass]="{ visible: isChatMode }"
+      >
+        <!-- Historial de mensajes -->
+        <div class="chat-messages flex-grow-1 overflow-auto p-4">
           <div
-            *ngIf="msg.user"
-            class="message user-message d-flex align-items-start gap-3 ms-auto flex-row-reverse w-50 my-4"
+            class="message-container mb-4"
+            *ngFor="let msg of chatHistory; let i = index"
           >
+            <!-- Mensaje del usuario -->
             <div
-              class="message-content bg-secondary text-white p-3 rounded-4 shadow-sm my-2"
+              *ngIf="msg.user"
+              class="message user-message d-flex align-items-start gap-3 ms-auto flex-row-reverse w-50 my-4"
             >
-              {{ msg.user }}
-            </div>
-          </div>
-          <!-- Mensaje del bot -->
-          <div *ngIf="msg.bot" class="message bot-message mb-3">
-            <div
-              class="message-content text-light p-3 rounded-3"
-              [innerHTML]="msg.bot"
-            ></div>
-          </div>
-        </div>
-
-        <!-- Componente Gráficas Múltiples (condicional) -->
-        <div
-          *ngIf="showMultipleGraphsComponent"
-          class="w-100 d-flex justify-content-center my-4"
-        >
-          <app-graficas-multiples
-            [dynamicData]="multipleGraphsData"
-            (close)="hideMultipleGraphs()"
-          ></app-graficas-multiples>
-        </div>
-        <!-- Componente Fuentes (condicional) -->
-        <div *ngIf="showSourcesComponent" class="w-100 my-4">
-          <div
-            class="bg-dark bg-opacity-50 p-4 rounded-3 border border-secondary"
-          >
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="text-warning m-0">
-                <i class="bi bi-journal-text me-2"></i>
-                Fuentes de Información
-              </h5>
-              <button
-                class="btn btn-sm btn-outline-secondary"
-                (click)="hideSources()"
-                title="Ocultar fuentes"
+              <div
+                class="message-content bg-secondary text-white p-3 rounded-4 shadow-sm my-2"
               >
-                <i class="bi bi-x-lg"></i>
-              </button>
+                {{ msg.user }}
+              </div>
             </div>
-
-            <!-- Usar el nuevo componente de fuentes -->
-            <app-sources-display
-              [sources]="sourcesData"
-              title="Fuentes Consultadas"
-            >
-            </app-sources-display>
+            <!-- Mensaje del bot -->
+            <div *ngIf="msg.bot" class="message bot-message mb-3">
+              <div
+                class="message-content text-light p-3 rounded-3"
+                [innerHTML]="msg.bot"
+              ></div>
+            </div>
           </div>
-        </div>
 
-        <!-- Indicador de escritura -->
-        <div
-          *ngIf="loading"
-          class="message bot-message typing d-flex align-items-start gap-3"
-          style="max-width: 800px"
-        >
+          <!-- Componente Gráficas Múltiples (condicional) -->
           <div
-            class="message-avatar flex-shrink-0"
-            style="width: 32px; height: 32px; margin-top: 0.5rem"
+            *ngIf="showMultipleGraphsComponent"
+            class="w-100 d-flex justify-content-center my-4"
+          >
+            <app-graficas-multiples
+              [dynamicData]="multipleGraphsData"
+              (close)="hideMultipleGraphs()"
+            ></app-graficas-multiples>
+          </div>
+          <!-- Componente Fuentes (condicional) -->
+          <div *ngIf="showSourcesComponent" class="w-100 my-4">
+            <div
+              class="bg-dark bg-opacity-50 p-4 rounded-3 border border-secondary"
+            >
+              <div class="d-flex justify-content-end mb-3">
+                <button
+                  class="btn btn-sm btn-outline-secondary"
+                  (click)="hideSources()"
+                  title="Ocultar fuentes"
+                >
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </div>
+
+              <!-- Usar el nuevo componente de fuentes -->
+              <app-sources-display
+                [sources]="sourcesData"
+                title="Fuentes Consultadas"
+              >
+              </app-sources-display>
+            </div>
+          </div>
+
+          <!-- Indicador de escritura -->
+          <div
+            *ngIf="loading"
+            class="message bot-message typing d-flex align-items-start gap-3"
+            style="max-width: 800px"
           >
             <div
-              class="avatar-circle w-100 h-100 bg-gradient rounded-circle d-flex align-items-center justify-content-center"
+              class="message-avatar flex-shrink-0"
+              style="width: 32px; height: 32px; margin-top: 0.5rem"
             >
-              <i class="bi bi-graph-up text-primary"></i>
+              <div
+                class="avatar-circle w-100 h-100 bg-gradient rounded-circle d-flex align-items-center justify-content-center"
+              >
+                <i class="bi bi-graph-up text-primary"></i>
+              </div>
             </div>
+            <div
+              class="message-content bg-secondary border text-light p-3 rounded-4 shadow-sm"
+            >
+              <div class="typing-indicator d-flex gap-1 align-items-center">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input del chat -->
+        <div class="chat-input-container p-3 w-75 m-auto bg-dark bg-opacity-95">
+          <div class="input-wrapper position-relative">
+            <textarea
+              class="form-control chat-textarea-small bg-secondary border-secondary text-white rounded-pill"
+              placeholder="Continúa la conversación..."
+              [(ngModel)]="searchText"
+              (keydown.enter)="handleEnter($event)"
+              (input)="autoResize($event)"
+              rows="1"
+              autocomplete="off"
+            ></textarea>
+            <button
+              type="button"
+              class="btn btn-success rounded-circle send-button-small position-absolute top-50 end-0 translate-middle-y me-2"
+              (click)="sendSearchWithAnimation()"
+              [disabled]="!searchText.trim() || loading"
+              [ngClass]="{ 'send-anim': sendAnimating }"
+            >
+              <i class="bi bi-arrow-up"></i>
+            </button>
           </div>
           <div
-            class="message-content bg-secondary border text-light p-3 rounded-4 shadow-sm"
+            class="quick-actions-chat d-flex gap-2 justify-content-center mt-3"
+            *ngIf="hasLastQuery"
           >
-            <div class="typing-indicator d-flex gap-1 align-items-center">
-              <span class="typing-dot"></span>
-              <span class="typing-dot"></span>
-              <span class="typing-dot"></span>
-            </div>
+            <button
+              class="btn btn-outline-secondary btn-sm rounded-pill"
+              (click)="sendSearch('grafica')"
+              [disabled]="loading"
+              title="Generar gráfica de la última consulta"
+            >
+              📈 Gráfica
+            </button>
+            <button
+              class="btn btn-outline-secondary btn-sm rounded-pill"
+              (click)="sendSearch('fuentes')"
+              [disabled]="loading"
+              title="Ver fuentes de la última consulta"
+            >
+              📚 Fuentes
+            </button>
+            <button
+              class="btn btn-outline-danger btn-sm rounded-pill"
+              (click)="clearCorruptedCache()"
+              title="Limpiar caché corrupto"
+            >
+              🗑️ Limpiar Caché
+            </button>
+            <button
+              class="btn btn-outline-primary btn-sm rounded-pill"
+              (click)="showCacheStats()"
+              title="Mostrar estadísticas del caché"
+            >
+              📊 Stats Caché
+            </button>
           </div>
-        </div>
-      </div>
-
-      <!-- Input del chat -->
-      <div class="chat-input-container p-3 w-75 m-auto bg-dark bg-opacity-95">
-        <div class="input-wrapper position-relative">
-          <textarea
-            class="form-control chat-textarea-small bg-secondary border-secondary text-white rounded-pill"
-            placeholder="Continúa la conversación..."
-            [(ngModel)]="searchText"
-            (keydown.enter)="handleEnter($event)"
-            (input)="autoResize($event)"
-            rows="1"
-            autocomplete="off"
-          ></textarea>
-          <button
-            type="button"
-            class="btn btn-success rounded-circle send-button-small position-absolute top-50 end-0 translate-middle-y me-2"
-            (click)="sendSearchWithAnimation()"
-            [disabled]="!searchText.trim() || loading"
-            [ngClass]="{ 'send-anim': sendAnimating }"
-          >
-            <i class="bi bi-arrow-up"></i>
-          </button>
-        </div>
-        <div
-          class="quick-actions-chat d-flex gap-2 justify-content-center mt-3"
-          *ngIf="hasLastQuery"
-        >
-          <button
-            class="btn btn-outline-secondary btn-sm rounded-pill"
-            (click)="sendSearch('grafica')"
-            [disabled]="loading"
-            title="Generar gráfica de la última consulta"
-          >
-            📈 Gráfica
-          </button>
-          <button
-            class="btn btn-outline-secondary btn-sm rounded-pill"
-            (click)="sendSearch('fuentes')"
-            [disabled]="loading"
-            title="Ver fuentes de la última consulta"
-          >
-            📚 Fuentes
-          </button>
-          <button
-            class="btn btn-outline-danger btn-sm rounded-pill"
-            (click)="clearCorruptedCache()"
-            title="Limpiar caché corrupto"
-          >
-            🗑️ Limpiar Caché
-          </button>
-          <button
-            class="btn btn-outline-primary btn-sm rounded-pill"
-            (click)="showCacheStats()"
-            title="Mostrar estadísticas del caché"
-          >
-            📊 Stats Caché
-          </button>
         </div>
       </div>
     </div>

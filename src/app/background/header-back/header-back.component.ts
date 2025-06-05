@@ -45,6 +45,11 @@ export class HeaderBackComponent implements OnInit {
 
     const userId = this.tokenService.getUserId();
 
+    // Debug: Ver qué ID estamos obteniendo en el header
+    console.log('=== DEBUG Header loadUserInfo ===');
+    console.log('UserId obtenido en header:', userId);
+    console.log('Username:', this.username);
+
     if (!userId) {
       this.isLoadingUserInfo = false;
       this.userInfo = {
@@ -57,8 +62,10 @@ export class HeaderBackComponent implements OnInit {
       return;
     }
 
+    console.log('Solicitando información de usuario con ID:', userId);
     this.userInfoService.getUserInfo(userId).subscribe({
       next: (userInfo) => {
+        console.log('Información de usuario recibida:', userInfo);
         this.userInfo = userInfo;
         this.isLoadingUserInfo = false;
       },

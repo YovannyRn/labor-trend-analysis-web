@@ -62,7 +62,6 @@ export class TokenService {
       return null;
     }
   }
-
   getUserId(): number | null {
     const token = this.getAccessToken();
 
@@ -70,11 +69,21 @@ export class TokenService {
 
     try {
       const decoded: any = jwtDecode(token);
+
+      // Debug: Ver qué contiene el token decodificado
+      console.log('Token decodificado completo:', decoded);
+      console.log('Propiedades disponibles:', Object.keys(decoded));
+
       const userId =
         decoded.userId || decoded.id || decoded.user_id || decoded.uid;
 
+      console.log('ID encontrado:', userId);
+      console.log('Tipo del ID:', typeof userId);
+
       if (userId) {
-        return typeof userId === 'number' ? userId : parseInt(userId);
+        const parsedId = typeof userId === 'number' ? userId : parseInt(userId);
+        console.log('ID parseado:', parsedId);
+        return parsedId;
       }
       return null;
     } catch (error) {
