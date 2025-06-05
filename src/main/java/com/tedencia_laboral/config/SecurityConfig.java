@@ -38,27 +38,36 @@ public class SecurityConfig {
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(UserDetailsService userDetailsService) {
         return new JwtAuthenticationFilter(jwtUtil, userDetailsService);
-    }    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth                        .requestMatchers(
-                                "/users/login",
-                                "/users",
-                                "/users/register",
-                                "/users/check-token",
-                                "/user-info/{userId}",
-                                "/delete/{id}",
-                                "/n8n/process",
-                                "/chat-history/**"
-                        )
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    }    
+    @Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter) throws Exception {
+    http.csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                    // Solo endpoints públicos esenciales
+                    .requestMatchers(
+                            "/users/login",
+                            "/users/register",
+                            "/users/check-token"
+                    )
+                    .permitAll()
+                    
+                    // Endpoints que requieren autenticación
+                    .requestMatchers(
+                            "/users",
+                            "/user-info/**",
+                            "/delete/**",
+                            "/n8n/process",
+                            "/chat-history/**"
+                    )
+                    .authenticated()
+                    
+                    .anyRequest()
+                    .authenticated())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+    return http.build();
+}
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
