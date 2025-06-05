@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
+import com.tedencia_laboral.models.User;
 
 /*
  * Esta clase la usaremos para crear un objeto de tipo JWT (Token) con sus correspondientes atributos
@@ -27,20 +28,28 @@ public class JwtUtil {
 
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(this.secret.getBytes());
-    }
-
-    public String generateToken(String username) {
+    }    public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(user.getUsername())
+                .claim("userId", user.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + this.expiration))
                 .signWith(this.getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
-
-
     public String extractUsername(String token) {
         return this.extractClaim(token, Claims::getSubject);
+    }
+
+    public Long extractUserId(String token) {
+        Claims claims = this.extractClaims(token);
+        Object userIdObj = claims.get("userId");
+        if (userIdObj instanceof Integer) {
+            return ((Integer) userIdObj).longValue();
+        } else if (userIdObj instanceof Long) {
+            return (Long) userIdObj;
+        }
+        return null;
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -62,10 +71,14 @@ public class JwtUtil {
 
     private Date extractExpiration(String token) {
         return this.extractClaim(token, Claims::getExpiration);
+    }    public boolean validateToken(String token, String username) {
+        return username.equals(this.extractUsername(token)) && !this.isTokenExpired(token);
     }
 
-    public boolean validateToken(String token, String username) {
-        return username.equals(this.extractUsername(token)) && !this.isTokenExpired(token);
+    public boolean validateToken(String token, User user) {
+        return user.getUsername().equals(this.extractUsername(token)) 
+               && user.getId().equals(this.extractUserId(token))
+               && !this.isTokenExpired(token);
     }
 
 }

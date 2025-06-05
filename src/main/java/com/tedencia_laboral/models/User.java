@@ -33,9 +33,6 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
 
 
     public Long getId() {
@@ -78,11 +75,4 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }
