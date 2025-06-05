@@ -10,21 +10,20 @@ export interface N8nResponse {
   response_type?: 'text' | 'salary_data' | 'sector_growth' | 'sources_info';
   message?: string;
   structured_data?: any;
-  sources?: string[] | string; // Permite que sea un array de strings o un string (JSON)
+  sources?: string[] | string; 
   fuentes_utilizadas?: string[];
-  output?: string; // 🔥 Campo que contiene el JSON de N8N sin procesar
-  queryId?: number; // ID del registro creado en la base de datos
+  output?: string; 
+  queryId?: number;
   timestamp?: string;
 }
 
-// 🔥 Interface para datos parseados del campo output
+
 export interface ParsedOutputData {
   // Campos básicos de respuesta
   success?: boolean;
   response_type?: 'text' | 'salary_data' | 'sector_growth' | 'sources_info';
   message?: string;
 
-  // Datos estructurados para gráficos o visualizaciones
   structured_data?:
     | any
     | {

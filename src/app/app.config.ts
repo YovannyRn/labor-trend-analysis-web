@@ -10,7 +10,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideAnimations(), // <-- Habilita animaciones para ngx-charts
+    provideAnimations(), 
     provideHttpClient(withInterceptors([tokenInterceptor])),
   ],
 };

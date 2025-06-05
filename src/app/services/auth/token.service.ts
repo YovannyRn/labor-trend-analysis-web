@@ -15,13 +15,13 @@ export class TokenService {
   saveToken(token: string, refreshToken: string) {
     this.cookieService.set(this.ACCESS_TOKEN_KEY, token, {
       path: '/',
-      secure: environment.tokenSecure, //En produccion tiene que estar en true
+      secure: environment.tokenSecure, 
       sameSite: 'Strict',
     });
 
     this.cookieService.set(this.REFRESH_TOKEN_KEY, refreshToken, {
       path: '/',
-      secure: environment.tokenSecure, //En produccion tiene que estar en true
+      secure: environment.tokenSecure, 
       sameSite: 'Strict',
     });
   }
@@ -69,20 +69,11 @@ export class TokenService {
 
     try {
       const decoded: any = jwtDecode(token);
-
-      // Debug: Ver qué contiene el token decodificado
-      console.log('Token decodificado completo:', decoded);
-      console.log('Propiedades disponibles:', Object.keys(decoded));
-
       const userId =
         decoded.userId || decoded.id || decoded.user_id || decoded.uid;
 
-      console.log('ID encontrado:', userId);
-      console.log('Tipo del ID:', typeof userId);
-
       if (userId) {
         const parsedId = typeof userId === 'number' ? userId : parseInt(userId);
-        console.log('ID parseado:', parsedId);
         return parsedId;
       }
       return null;

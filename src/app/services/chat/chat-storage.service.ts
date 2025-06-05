@@ -69,11 +69,10 @@ export class ChatStorageService {
 
     // Verificar que la sesión pertenece al usuario actual
     if (session.userId && session.userId !== currentUserId) {
-      console.error('Intento de acceso a sesión de otro usuario.');
       return;
     }
 
-    // Si la sesión no tiene userId, asignar el actual (para compatibilidad con sesiones existentes)
+    
     if (!session.userId) {
       session.userId = currentUserId;
     }
@@ -304,7 +303,6 @@ export class ChatStorageService {
   private loadFromStorage(): void {
     const currentUserId = this.tokenService.getUserId();
     if (!currentUserId) {
-      console.log('No hay usuario autenticado, no se cargan sesiones de chat.');
       return;
     }
 
@@ -347,9 +345,6 @@ export class ChatStorageService {
   private saveToStorage(): void {
     const currentUserId = this.tokenService.getUserId();
     if (!currentUserId) {
-      console.warn(
-        'No hay usuario autenticado, no se pueden guardar las sesiones.'
-      );
       return;
     }
 
@@ -385,11 +380,6 @@ export class ChatStorageService {
     if (filteredSessions.length !== userSessions.length) {
       this.updateUserSessions(filteredSessions);
       this.saveToStorage();
-      console.log(
-        `Cleaned up ${
-          userSessions.length - filteredSessions.length
-        } old chat sessions for user ${currentUserId}`
-      );
     }
   }
 }

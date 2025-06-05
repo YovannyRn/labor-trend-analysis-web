@@ -39,7 +39,6 @@ export class ChatSessionService {
       };
 
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(session));
-      console.log('Sesión guardada en localStorage');
     } catch (error) {
       console.error('Error guardando sesión:', error);
     }
@@ -53,7 +52,6 @@ export class ChatSessionService {
       const stored = localStorage.getItem(this.STORAGE_KEY);
       if (stored) {
         const session = JSON.parse(stored);
-        console.log('Sesión cargada desde localStorage');
         return session;
       }
     } catch (error) {
@@ -67,7 +65,6 @@ export class ChatSessionService {
    */
   clearCurrentSession(): void {
     localStorage.removeItem(this.STORAGE_KEY);
-    console.log('Sesión limpiada');
   }
 
   /**
@@ -84,12 +81,8 @@ export class ChatSessionService {
     try {
       const history = this.getSessionHistory();
       history.unshift(session);
-      
-      // Mantener solo las últimas 10 sesiones
       const limitedHistory = history.slice(0, 10);
-      
       localStorage.setItem(this.HISTORY_KEY, JSON.stringify(limitedHistory));
-      console.log('Sesión agregada al historial');
     } catch (error) {
       console.error('Error guardando en historial:', error);
     }

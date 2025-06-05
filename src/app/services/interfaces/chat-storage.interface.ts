@@ -15,7 +15,7 @@ export interface ChatSession {
   sourcesData?: any;
   createdAt: number;
   updatedAt: number;
-  userId?: number; // ID del usuario para separar sesiones por usuario
+  userId?: number; 
 }
 
 export interface ChatStorage {
