@@ -50,7 +50,6 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['sources']) {
-      console.log('🔄 Sources-display: Recibido nuevo input:', this.sources);
       this.processSources();
     }
   }
@@ -59,14 +58,12 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
    * Procesa las fuentes desde cualquier formato de respuesta de N8N
    */
   private processSources(): void {
-    console.log('🔍 Sources-display: Procesando fuentes:', this.sources);
 
     let extractedSources: string[] = [];
 
-    // Caso 1: Es una respuesta completa de N8N
     if (this.isN8nResponse(this.sources)) {
       extractedSources = this.extractSourcesFromN8nResponse(this.sources);
-    } // Caso 2: Ya es un array de strings
+    }
     else if (Array.isArray(this.sources)) {
       extractedSources = this.sources.filter(
         (source: any) => typeof source === 'string'
@@ -93,10 +90,6 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
 
     this.hasValidSources = this.processedSources.length > 0;
 
-    console.log(
-      `✅ Sources-display: Procesadas ${this.processedSources.length} fuentes válidas:`,
-      this.processedSources
-    );
   }
 
   /**
@@ -119,17 +112,6 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
    */
   private extractSourcesFromN8nResponse(response: N8nResponse): string[] {
     const sources: string[] = [];
-
-    console.log('🔍 Analizando respuesta N8N para fuentes:', {
-      response_type: response.response_type,
-      has_sources: !!response.sources,
-      has_fuentes_utilizadas: !!response.fuentes_utilizadas,
-      has_message: !!response.message,
-      has_output: !!response.output,
-    });
-
-    // SOLO extraer fuentes de campos específicos de fuentes, NO del mensaje de texto
-    // para evitar false positives en respuestas de chat normales
 
     // 1. Verificar sources directamente
     if (response.sources) {
@@ -217,13 +199,12 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
       try {
         const parsed = JSON.parse(trimmed);
         if (Array.isArray(parsed)) {
-          console.log('✅ Fuentes parseadas desde string JSON:', parsed);
           return parsed.filter(
             (item: any) => typeof item === 'string' && item.trim()
           );
         }
       } catch (error) {
-        console.warn('⚠️ Error parseando string JSON:', error);
+        console.warn('Error parseando string JSON:', error);
       }
     }
 
@@ -233,7 +214,7 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
         const parsed = JSON.parse(trimmed);
         return this.extractSourcesFromObject(parsed);
       } catch (error) {
-        console.warn('⚠️ Error parseando objeto JSON:', error);
+        console.warn('rror parseando objeto JSON:', error);
       }
     }
 
@@ -317,13 +298,13 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
       .replace(/"timestamp":\s*"[^"]*",?/g, '')
       .replace(/"[^"]*":\s*"[^"]*",?/g, '')
       .replace(/[\{\}]/g, '')
-      .replace(/^\s*,+\s*|\s*,+\s*$/g, '') // Remover comas al inicio/final
+      .replace(/^\s*,+\s*|\s*,+\s*$/g, '') 
       .trim();
 
     // Limpiar patrones adicionales problemáticos
     cleaned = cleaned
       .replace(/^["'\[\{]+|["'\]\}]+$/g, '') // Remover comillas/brackets al inicio/final
-      .replace(/\s*[\(\[\{]?\s*https?:\/\/[^\s\)\]\}]*\s*[\)\]\}]?\s*/g, ' ') // Limpiar URLs envueltas en paréntesis/brackets
+      .replace(/\s*[\(\[\{]?\s*https?:\/\/[^\s\)\]\}]*\s*[\)\]\}]?\s*/g, ' ') 
       .replace(/\s{2,}/g, ' ') // Normalizar espacios múltiples nuevamente
       .trim();
 
@@ -368,19 +349,16 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
 
     // Descartar si contiene solo metadata JSON
     if (cleaned.match(/^\{.*"timestamp".*\}$/)) {
-      console.log('❌ Fuente inválida (metadata JSON):', cleaned);
       return false;
     }
 
     // Descartar si es solo un timestamp o fecha
     if (cleaned.match(/^\d{4}-\d{2}-\d{2}/) || cleaned.match(/^\d+$/)) {
-      console.log('❌ Fuente inválida (timestamp):', cleaned);
       return false;
     }
 
     // Aceptar URLs directamente (fuentes más confiables)
     if (cleaned.match(/^https?:\/\//)) {
-      console.log('✅ Fuente válida (URL):', cleaned);
       return true;
     }
 
@@ -407,17 +385,13 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
           cleaned.toLowerCase().includes(keyword.toLowerCase())
       )
     ) {
-      console.log('❌ Fuente inválida (palabra clave):', cleaned);
       return false;
     }
 
     // Aceptar nombres de organizaciones o descripciones válidas
     if (cleaned.length >= 10 && cleaned.length <= 300) {
-      console.log('✅ Fuente válida (texto):', cleaned);
       return true;
     }
-
-    console.log('❌ Fuente rechazada:', cleaned);
     return false;
   }
   /**
@@ -585,7 +559,7 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
       .replace(/\.(com|org|es|eu|gov|gob)$/, '')
       .replace(/\.(net|info|biz)$/, '');
 
-    // Capitalizar primera letra y reemplazar guiones/puntos por espacios
+
     return cleanDomain
       .split(/[.-]/)
       .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
@@ -689,18 +663,11 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
   async copyToClipboard(url: string): Promise<void> {
     try {
       await navigator.clipboard.writeText(url);
-      console.log('✅ URL copiada al portapapeles:', url);
-      // Aquí podrías mostrar un toast de confirmación
     } catch (err) {
-      console.error('❌ Error al copiar al portapapeles:', err);
-      // Fallback para navegadores que no soportan clipboard API
       this.fallbackCopyToClipboard(url);
     }
   }
 
-  /**
-   * Método de fallback para copiar al portapapeles
-   */
   private fallbackCopyToClipboard(text: string): void {
     const textArea = document.createElement('textarea');
     textArea.value = text;
@@ -713,17 +680,15 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
 
     try {
       document.execCommand('copy');
-      console.log('✅ URL copiada al portapapeles (fallback)');
+      console.log('URL copiada al portapapeles (fallback)');
     } catch (err) {
-      console.error('❌ Error en fallback de copia:', err);
+      console.error(' Error en fallback de copia:', err);
     }
 
     document.body.removeChild(textArea);
   }
 
-  /**
-   * Exporta las fuentes como archivo JSON
-   */
+ 
   exportSources(): void {
     const exportData = {
       timestamp: new Date().toISOString(),
@@ -741,6 +706,5 @@ export class SourcesDisplayComponent implements OnInit, OnChanges {
     link.click();
 
     URL.revokeObjectURL(url);
-    console.log('✅ Fuentes exportadas como JSON');
   }
 }

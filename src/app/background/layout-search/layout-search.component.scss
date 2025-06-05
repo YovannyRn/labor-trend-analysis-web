@@ -3,19 +3,18 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
     Helvetica, Arial, sans-serif;
 
-  // Layout flexbox para sidebar y contenido principal
   &.sidebar-visible {
     .main-content {
       transition: margin-left 0.3s ease;
 
       &.with-sidebar {
-        margin-left: 0; // El sidebar ocupa su propio espacio
+        margin-left: 0;
       }
     }
   }
 }
 
-// Contenedor del sidebar
+
 .sidebar-container {
   width: 300px;
   min-width: 300px;
@@ -36,15 +35,13 @@
   }
 }
 
-// Contenido principal
 .main-content {
   flex: 1;
-  min-width: 0; // Permite que el contenido se contraiga
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }
 
-// Logo gradient effect
 .text-gradient {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
@@ -52,12 +49,10 @@
   background-clip: text;
 }
 
-// Avatar gradient
 .bg-gradient {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-// State transitions
 .initial-state {
   transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   z-index: 10;
@@ -82,18 +77,16 @@
   }
 }
 
-// Hide scrollbars while keeping scroll functionality
 .chat-messages {
   scroll-behavior: smooth;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
 
   &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none; 
   }
 }
 
-// Textarea auto-resize and scrollbar hiding
 .chat-textarea,
 .chat-textarea-small {
   min-height: 56px;
@@ -117,7 +110,7 @@
   padding: 1.2rem 4rem 1.2rem 1.8rem !important;
 }
 
-// Send button positioning and animations
+
 .send-button,
 .send-button-small {
   width: 44px;
@@ -138,7 +131,7 @@
   height: 40px;
 }
 
-// Typing indicator animation
+
 .typing-dot {
   width: 8px;
   height: 8px;
@@ -170,7 +163,7 @@
   }
 }
 
-// Button hover effects
+
 .btn {
   transition: all 0.2s ease !important;
 
@@ -179,14 +172,13 @@
   }
 }
 
-// Backdrop blur effect
 .chat-header,
 .chat-input-container {
   backdrop-filter: blur(10px);
   border-radius: 1.5rem 1.5rem 0.5rem 1.5rem !important;
 }
 
-// Message styling improvements
+
 .message-content {
   font-size: 1.1rem;
   line-height: 1.6;
@@ -206,7 +198,7 @@
   margin-right: 10%px;
 }
 
-// Estilos para componentes de datos
+
 .sources-container {
   max-width: 800px;
   margin: 0 auto;
@@ -228,7 +220,7 @@
   }
 }
 
-// Estilos para botones de prueba (solo en desarrollo)
+
 .test-actions {
   .btn {
     backdrop-filter: blur(10px);
@@ -242,7 +234,6 @@
   }
 }
 
-// Mejoras visuales para el componente de gráfica
 .w-75 {
   .btn-outline-secondary {
     &:hover {

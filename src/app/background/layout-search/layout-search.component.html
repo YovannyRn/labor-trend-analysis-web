@@ -146,7 +146,7 @@
             </div>
           </div>
 
-          <!-- Componente Gráficas Múltiples (condicional) -->
+          <!-- Componente Gráficas Múltiples  -->
           <div
             *ngIf="showMultipleGraphsComponent"
             class="w-100 d-flex justify-content-center my-4"
@@ -156,7 +156,7 @@
               (close)="hideMultipleGraphs()"
             ></app-graficas-multiples>
           </div>
-          <!-- Componente Fuentes (condicional) -->
+          <!-- Componente Fuentes  -->
           <div *ngIf="showSourcesComponent" class="w-100 my-4">
             <div
               class="bg-dark bg-opacity-50 p-4 rounded-3 border border-secondary"
@@ -235,34 +235,20 @@
             *ngIf="hasLastQuery"
           >
             <button
-              class="btn btn-outline-secondary btn-sm rounded-pill"
+              class="btn btn-outline-primary btn-sm rounded-pill"
               (click)="sendSearch('grafica')"
               [disabled]="loading"
               title="Generar gráfica de la última consulta"
             >
-              📈 Gráfica
+              <i class="bi bi-pie-chart-fill"></i> Gráfica
             </button>
             <button
-              class="btn btn-outline-secondary btn-sm rounded-pill"
+              class="btn btn-outline-success btn-sm rounded-pill"
               (click)="sendSearch('fuentes')"
               [disabled]="loading"
               title="Ver fuentes de la última consulta"
             >
-              📚 Fuentes
-            </button>
-            <button
-              class="btn btn-outline-danger btn-sm rounded-pill"
-              (click)="clearCorruptedCache()"
-              title="Limpiar caché corrupto"
-            >
-              🗑️ Limpiar Caché
-            </button>
-            <button
-              class="btn btn-outline-primary btn-sm rounded-pill"
-              (click)="showCacheStats()"
-              title="Mostrar estadísticas del caché"
-            >
-              📊 Stats Caché
+              <i class="bi bi-chat-text-fill"></i> Fuentes
             </button>
           </div>
         </div>

@@ -13,6 +13,7 @@ import { CredentialsService } from '../../services/auth/credentials.service';
 import { LoginInterface } from '../../services/interfaces/user-interface';
 import { UseStateService } from '../../services/auth/use-state.service';
 import { PopupService } from '../../services/utils/popup.service';
+import { ChatStorageService } from '../../services/chat/chat-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -23,14 +24,14 @@ import { PopupService } from '../../services/utils/popup.service';
 })
 export class LoginComponent {
   loginForm: FormGroup;
-
   constructor(
     private tokenService: TokenService,
     private credentialsService: CredentialsService,
     private formBuilder: FormBuilder,
     private router: Router,
     private popupService: PopupService,
-    private useStateService: UseStateService
+    private useStateService: UseStateService,
+    private chatStorageService: ChatStorageService
   ) {
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required]],
@@ -49,6 +50,10 @@ export class LoginComponent {
           setTimeout(() => {
             this.tokenService.saveToken(data.token, '234325423423');
             this.useStateService.save(data.username);
+
+            // Recargar datos de chat para el usuario autenticado
+            this.chatStorageService.reloadUserData();
+
             this.popupService.close();
             this.router.navigate(['/app']);
           }, 1500);

@@ -64,15 +64,12 @@ export class LayoutSearchComponent implements OnInit {
     private chatSessionManager: ChatSessionManagerService
   ) {}
   ngOnInit() {
-    this.clearCorruptedCache();
 
-    // Inicializar la sesión de chat
     const currentSession = this.chatStorageService.getCurrentSession();
     if (currentSession) {
-      // Si hay una sesión activa, cargarla
       this.onSessionChanged(currentSession);
     } else {
-      // Si no hay sesión activa, crear una nueva
+
       this.chatStorageService.createNewSession();
     }
   }
@@ -81,11 +78,7 @@ export class LayoutSearchComponent implements OnInit {
     const userId = this.tokenService.getUserId();
     const userName = this.tokenService.getUsername();
 
-    // Debug: Ver qué ID estamos obteniendo
-    console.log('=== DEBUG sendSearch ===');
-    console.log('UserId obtenido:', userId);
-    console.log('UserName obtenido:', userName);
-    console.log('Tipo de solicitud:', tipo);
+
 
     if (!userId || !userName) {
       this.chatHistory.push({
@@ -94,7 +87,6 @@ export class LayoutSearchComponent implements OnInit {
       return;
     }
 
-    // Validaciones iniciales
     if (!this.searchText.trim() && !tipo) return;
 
     if (tipo && !this.lastUserQuery) {
@@ -123,7 +115,6 @@ export class LayoutSearchComponent implements OnInit {
     if (!this.isChatMode) this.isChatMode = true;
     this.loading = true;
 
-    // Determinar mensaje a usar
     let message = tipo ? this.lastUserQuery : this.searchText;
 
     if (!tipo) {
@@ -131,10 +122,9 @@ export class LayoutSearchComponent implements OnInit {
       this.isGraphRequested = false;
       this.isSourcesRequested = false;
       this.searchText = '';
-      this.chatHistory.push({ user: message }); // Guardar mensaje en la sesión actual
+      this.chatHistory.push({ user: message }); 
       this.chatSessionManager.saveMessageToSession({ user: message });
 
-      // Actualizar la última consulta del usuario en el servicio de almacenamiento
       this.chatStorageService.updateLastUserQuery(message);
     }
 
@@ -178,18 +168,17 @@ export class LayoutSearchComponent implements OnInit {
         this.responseValidator.hasSourcesInResponse(response)
       ) {
         if (this.handleSourcesResponse(response)) {
-          // Si se procesaron fuentes exitosamente, no mostrar mensaje de chat
           return;
         }
-        // Si no se encontraron fuentes, continuar con el flujo normal para mostrar el mensaje
+
       } else {
-        // Ocultar componentes si no es tipo especial
+        //  Ocultar componentes si no es tipo especial
+        /** TODO: Implementar lógica para ocultar componentes */
         this.showMultipleGraphsComponent = false;
         this.showSourcesComponent = false;
       }
       this.chatHistory.push({ bot: botMsg });
 
-      // Guardar mensaje del bot en la sesión actual
       this.chatSessionManager.saveMessageToSession({ bot: botMsg });
 
       this.loading = false;
@@ -356,9 +345,6 @@ export class LayoutSearchComponent implements OnInit {
         'No se pudo autenticar la solicitud. Por favor, inicia sesión nuevamente.'
       );
     }
-    console.log(
-      `Enviando solicitud a N8N con: userId=${userId}, userName=${userName}, tipo=${tipo}`
-    );
 
     if (tipo === 'grafica') {
       return await firstValueFrom(
@@ -419,25 +405,7 @@ export class LayoutSearchComponent implements OnInit {
   get hasLastQuery(): boolean {
     return this.lastUserQuery.trim().length > 0;
   }
-  clearCorruptedCache() {
-    const keysToDelete: string[] = [];
-    this.queryCache.forEach((response, key) => {
-      const tipo = key.split(':')[0];
-      if (!this.responseValidator.isValidResponse(response, tipo)) {
-        keysToDelete.push(key);
-      }
-    });
-    keysToDelete.forEach((key) => this.queryCache.delete(key));
-
-    if (keysToDelete.length > 0) {
-      this.chatHistory.push({
-        bot: `🗑️ Caché limpiado: se eliminaron ${keysToDelete.length} entradas corruptas. El sistema debería funcionar mejor ahora.`,
-      });
-      setTimeout(() => this.scrollToBottom(), 100);
-    }
-
-    return keysToDelete.length;
-  }
+ 
   /**
    * Maneja el evento cuando se selecciona una sesión de chat diferente
    */
@@ -484,9 +452,6 @@ export class LayoutSearchComponent implements OnInit {
     }
   }
 
-  /**
-   * Maneja el evento cuando se solicita un nuevo chat
-   */
   onNewChatRequested(): void {
     // Limpiar el estado actual
     this.chatHistory = [];
@@ -498,60 +463,30 @@ export class LayoutSearchComponent implements OnInit {
     this.isSourcesRequested = false;
   }
 
-  /**
-   * Maneja el evento cuando se alterna el estado de colapso de la barra lateral
-   * @param isCollapsed Indica si la barra lateral está colapsada
-   */
   onSidebarToggled(isCollapsed: boolean): void {
     this.isSidebarCollapsed = isCollapsed;
 
-    // Si estamos ajustando el layout de la aplicación según el estado de la barra lateral,
-    // podemos hacerlo aquí. Por ejemplo:
     setTimeout(() => {
-      // Dar tiempo para que se complete la animación del sidebar y luego ajustar otros componentes
       if (this.chatMessagesRef) {
         this.scrollToBottom();
       }
     }, 300);
   }
 
-  /**
-   * Alterna la visibilidad del sidebar
-   */
   toggleSidebar(): void {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
 
-    // Dar tiempo para que se complete la animación y ajustar otros componentes
     setTimeout(() => {
       if (this.chatMessagesRef) {
         this.scrollToBottom();
       }
     }, 300);
   }
-  /**
-   * Maneja el evento de nueva sesión desde el sidebar
-   */
   onNewSession(): void {
-    // El sidebar ya creó la sesión, solo limpiar el estado actual del chat
     this.onNewChatRequested();
   }
 
-  showCacheStats() {
-    const stats = { chat: 0, grafica: 0, fuentes: 0, valid: 0, invalid: 0 };
-    this.queryCache.forEach((response, key) => {
-      const tipo = key.split(':')[0];
-      if (tipo === 'chat') stats.chat++;
-      else if (tipo === 'grafica') stats.grafica++;
-      else if (tipo === 'fuentes') stats.fuentes++;
-      if (this.responseValidator.isValidResponse(response, tipo)) stats.valid++;
-      else stats.invalid++;
-    });
 
-    this.chatHistory.push({
-      bot: `📊 **Estadísticas del Caché:**\n\n**Total:** ${this.queryCache.size} entradas\n**Chat:** ${stats.chat} | **Gráficas:** ${stats.grafica} | **Fuentes:** ${stats.fuentes}\n**Válidas:** ${stats.valid} | **Inválidas:** ${stats.invalid}`,
-    });
-    setTimeout(() => this.scrollToBottom(), 100);
-  }
   private isValidSource(source: unknown): boolean {
     return !!source && typeof source === 'string' && source.trim().length > 3;
   }

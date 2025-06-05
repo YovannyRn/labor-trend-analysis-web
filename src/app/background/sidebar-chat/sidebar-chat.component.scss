@@ -13,7 +13,6 @@
     max-width: 60px;
   }
 
-  // Scrollbar personalizado para sessions-container
   .sessions-container {
     &::-webkit-scrollbar {
       width: 4px;
@@ -34,7 +33,7 @@
     }
   }
 
-  // Efectos específicos de hover para session-item
+m
   .session-item {
     transition: all 0.3s ease;
     cursor: pointer;
@@ -51,7 +50,6 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
-    // Efectos de hover específicos para botones de acción
     .btn-action {
       transition: all 0.2s ease;
 
@@ -66,7 +64,6 @@
       }
     }
 
-    // Tooltip positioning específico
     .session-tooltip {
       opacity: 0;
       pointer-events: none;
@@ -78,7 +75,6 @@
     }
   }
 
-  // Clipping de texto específico para preview
   .session-preview {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -86,13 +82,11 @@
     overflow: hidden;
   }
 
-  // Animación de entrada
   .session-item {
     animation: slideInFromLeft 0.3s ease;
   }
 }
 
-// Keyframes para animaciones
 @keyframes slideInFromLeft {
   from {
     transform: translateX(-100%);
@@ -104,7 +98,6 @@
   }
 }
 
-// Ajustes responsive
 @media (max-width: 768px) {
   .sidebar-chat {
     &:not(.collapsed) {
@@ -114,7 +107,6 @@
   }
 }
 
-// Cursor pointer personalizado
 .cursor-pointer {
   cursor: pointer;
 }

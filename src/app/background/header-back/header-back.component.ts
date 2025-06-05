@@ -6,6 +6,7 @@ import { PopupService } from '../../services/utils/popup.service';
 import { UserInfoService } from '../../services/auth/user-info.service';
 import { UserInfo } from '../../services/interfaces/user-info';
 import { CommonModule } from '@angular/common';
+import { ChatStorageService } from '../../services/chat/chat-storage.service';
 
 @Component({
   selector: 'app-header-back',
@@ -18,13 +19,13 @@ export class HeaderBackComponent implements OnInit {
   userInfo: UserInfo | null = null;
   showUserPopup: boolean = false;
   isLoadingUserInfo: boolean = false;
-
   constructor(
     private router: Router,
     private popupService: PopupService,
     private tokenService: TokenService,
     private userStateService: UseStateService,
-    private userInfoService: UserInfoService
+    private userInfoService: UserInfoService,
+    private chatStorageService: ChatStorageService
   ) {}
   ngOnInit(): void {
     this.username = this.userStateService.getUsername() || 'Usuario';
@@ -45,10 +46,6 @@ export class HeaderBackComponent implements OnInit {
 
     const userId = this.tokenService.getUserId();
 
-    // Debug: Ver qué ID estamos obteniendo en el header
-    console.log('=== DEBUG Header loadUserInfo ===');
-    console.log('UserId obtenido en header:', userId);
-    console.log('Username:', this.username);
 
     if (!userId) {
       this.isLoadingUserInfo = false;
@@ -61,16 +58,12 @@ export class HeaderBackComponent implements OnInit {
       };
       return;
     }
-
-    console.log('Solicitando información de usuario con ID:', userId);
     this.userInfoService.getUserInfo(userId).subscribe({
       next: (userInfo) => {
-        console.log('Información de usuario recibida:', userInfo);
         this.userInfo = userInfo;
         this.isLoadingUserInfo = false;
       },
       error: (error) => {
-        console.error('Error al cargar información del usuario:', error);
         this.isLoadingUserInfo = false;
         this.userInfo = {
           id: userId,
@@ -91,10 +84,9 @@ export class HeaderBackComponent implements OnInit {
       day: 'numeric',
     });
   }
-
   closeSession(): void {
     this.popupService.loader('Cerrando sesión', 'Vuelva pronto');
-
+    this.chatStorageService.clearUserData();
     this.tokenService.removeToken();
     this.userStateService.removeSession();
     setTimeout(() => {

@@ -6,19 +6,20 @@ import {
   ChatStorage,
   ChatComponentData,
 } from '../interfaces/chat-storage.interface';
+import { TokenService } from '../auth/token.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatStorageService {
-  private readonly STORAGE_KEY = 'labor_market_chats';
+  private readonly STORAGE_KEY_BASE = 'labor_market_chats';
   private readonly MAX_SESSIONS = 50; // Máximo de sesiones guardadas
   private readonly CLEANUP_INTERVAL = 7 * 24 * 60 * 60 * 1000; // 7 días
 
   private currentSessionSubject = new BehaviorSubject<ChatSession | null>(null);
   private sessionsSubject = new BehaviorSubject<ChatSession[]>([]);
 
-  constructor() {
+  constructor(private tokenService: TokenService) {
     this.loadFromStorage();
     this.cleanupOldSessions();
   }
@@ -31,10 +32,17 @@ export class ChatStorageService {
   get sessions$(): Observable<ChatSession[]> {
     return this.sessionsSubject.asObservable();
   }
-
   // Crear nueva sesión de chat
   createNewSession(title?: string): ChatSession {
     const now = Date.now();
+    const currentUserId = this.tokenService.getUserId();
+
+    if (!currentUserId) {
+      throw new Error(
+        'Usuario no autenticado. No se puede crear sesión de chat.'
+      );
+    }
+
     const session: ChatSession = {
       id: this.generateSessionId(),
       title: title || `Chat ${this.formatDate(now)}`,
@@ -44,15 +52,33 @@ export class ChatStorageService {
       hasSources: false,
       createdAt: now,
       updatedAt: now,
+      userId: currentUserId,
     };
 
     this.setCurrentSession(session);
     return session;
   }
-
   // Establecer sesión actual
   setCurrentSession(session: ChatSession): void {
-    const sessions = this.sessionsSubject.value;
+    const currentUserId = this.tokenService.getUserId();
+
+    if (!currentUserId) {
+      console.error('Usuario no autenticado. No se puede establecer sesión.');
+      return;
+    }
+
+    // Verificar que la sesión pertenece al usuario actual
+    if (session.userId && session.userId !== currentUserId) {
+      console.error('Intento de acceso a sesión de otro usuario.');
+      return;
+    }
+
+    // Si la sesión no tiene userId, asignar el actual (para compatibilidad con sesiones existentes)
+    if (!session.userId) {
+      session.userId = currentUserId;
+    }
+
+    const sessions = this.getUserSessions();
     const existingIndex = sessions.findIndex((s) => s.id === session.id);
 
     if (existingIndex >= 0) {
@@ -70,10 +96,9 @@ export class ChatStorageService {
     this.currentSessionSubject.next(session);
     this.saveToStorage();
   }
-
   // Cargar sesión existente
   loadSession(sessionId: string): ChatSession | null {
-    const sessions = this.sessionsSubject.value;
+    const sessions = this.getUserSessions();
     const session = sessions.find((s) => s.id === sessionId);
 
     if (session) {
@@ -135,13 +160,12 @@ export class ChatStorageService {
   updateLastUserQuery(query: string): void {
     this.updateCurrentSession({ lastUserQuery: query });
   }
-
   // Eliminar sesión
   deleteSession(sessionId: string): void {
-    const sessions = this.sessionsSubject.value.filter(
-      (s) => s.id !== sessionId
-    );
-    this.sessionsSubject.next(sessions);
+    const userSessions = this.getUserSessions();
+    const filteredSessions = userSessions.filter((s) => s.id !== sessionId);
+
+    this.updateUserSessions(filteredSessions);
 
     // Si eliminamos la sesión actual, limpiar
     const current = this.currentSessionSubject.value;
@@ -151,25 +175,24 @@ export class ChatStorageService {
 
     this.saveToStorage();
   }
-
   // Renombrar sesión
   renameSession(sessionId: string, newTitle: string): void {
-    const sessions = this.sessionsSubject.value;
-    const sessionIndex = sessions.findIndex((s) => s.id === sessionId);
+    const userSessions = this.getUserSessions();
+    const sessionIndex = userSessions.findIndex((s) => s.id === sessionId);
 
     if (sessionIndex >= 0) {
-      sessions[sessionIndex] = {
-        ...sessions[sessionIndex],
+      userSessions[sessionIndex] = {
+        ...userSessions[sessionIndex],
         title: newTitle,
         updatedAt: Date.now(),
       };
 
-      this.sessionsSubject.next([...sessions]);
+      this.updateUserSessions(userSessions);
 
       // Si es la sesión actual, actualizarla también
       const current = this.currentSessionSubject.value;
       if (current && current.id === sessionId) {
-        this.currentSessionSubject.next(sessions[sessionIndex]);
+        this.currentSessionSubject.next(userSessions[sessionIndex]);
       }
 
       this.saveToStorage();
@@ -180,17 +203,33 @@ export class ChatStorageService {
   getCurrentSession(): ChatSession | null {
     return this.currentSessionSubject.value;
   }
-
   // Obtener todas las sesiones
   getAllSessions(): ChatSession[] {
-    return this.sessionsSubject.value;
+    return this.getUserSessions();
   }
 
-  // Limpiar todo el almacenamiento
+  // Limpiar todo el almacenamiento del usuario actual
   clearAllSessions(): void {
     this.sessionsSubject.next([]);
     this.currentSessionSubject.next(null);
-    localStorage.removeItem(this.STORAGE_KEY);
+
+    const currentUserId = this.tokenService.getUserId();
+    if (currentUserId) {
+      const storageKey = this.getUserStorageKey(currentUserId);
+      localStorage.removeItem(storageKey);
+    }
+  }
+  // Limpiar datos al hacer logout
+  clearUserData(): void {
+    this.sessionsSubject.next([]);
+    this.currentSessionSubject.next(null);
+  }
+
+  // Recargar datos para el usuario actual (útil después del login o cambio de usuario)
+  reloadUserData(): void {
+    this.clearUserData();
+    this.loadFromStorage();
+    this.cleanupOldSessions();
   }
 
   // Generar título automático basado en el primer mensaje del usuario
@@ -214,7 +253,6 @@ export class ChatStorageService {
 
     return `${message.substring(0, 30)}...`;
   }
-
   // Métodos privados
   private generateSessionId(): string {
     return `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -230,16 +268,65 @@ export class ChatStorageService {
     });
   }
 
+  // Obtener clave de almacenamiento específica del usuario
+  private getUserStorageKey(userId: number): string {
+    return `${this.STORAGE_KEY_BASE}_user_${userId}`;
+  }
+
+  // Obtener sesiones del usuario actual
+  private getUserSessions(): ChatSession[] {
+    const currentUserId = this.tokenService.getUserId();
+    if (!currentUserId) {
+      return [];
+    }
+
+    return this.sessionsSubject.value.filter(
+      (session) => session.userId === currentUserId
+    );
+  }
+
+  // Actualizar sesiones del usuario actual
+  private updateUserSessions(userSessions: ChatSession[]): void {
+    const currentUserId = this.tokenService.getUserId();
+    if (!currentUserId) {
+      return;
+    }
+
+    // Mantener sesiones de otros usuarios y actualizar las del usuario actual
+    const allSessions = this.sessionsSubject.value;
+    const otherUsersSessions = allSessions.filter(
+      (session) => session.userId !== currentUserId
+    );
+
+    const newAllSessions = [...userSessions, ...otherUsersSessions];
+    this.sessionsSubject.next(newAllSessions);
+  }
   private loadFromStorage(): void {
+    const currentUserId = this.tokenService.getUserId();
+    if (!currentUserId) {
+      console.log('No hay usuario autenticado, no se cargan sesiones de chat.');
+      return;
+    }
+
     try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
+      const storageKey = this.getUserStorageKey(currentUserId);
+      const stored = localStorage.getItem(storageKey);
+
       if (stored) {
         const data: ChatStorage = JSON.parse(stored);
-        this.sessionsSubject.next(data.sessions || []);
+        // Filtrar solo las sesiones del usuario actual y añadir userId si no lo tienen
+        const userSessions = (data.sessions || [])
+          .map((session) => ({
+            ...session,
+            userId: session.userId || currentUserId,
+          }))
+          .filter((session) => session.userId === currentUserId);
 
-        // Cargar sesión actual si existe
+        this.sessionsSubject.next(userSessions);
+
+        // Cargar sesión actual si existe y pertenece al usuario
         if (data.currentSessionId) {
-          const currentSession = data.sessions.find(
+          const currentSession = userSessions.find(
             (s) => s.id === data.currentSessionId
           );
           if (currentSession) {
@@ -249,43 +336,59 @@ export class ChatStorageService {
       }
     } catch (error) {
       console.error('Error loading chat sessions from storage:', error);
-      // En caso de error, limpiar el storage corrupto
-      localStorage.removeItem(this.STORAGE_KEY);
+      // En caso de error, limpiar el storage corrupto del usuario
+      const currentUserId = this.tokenService.getUserId();
+      if (currentUserId) {
+        const storageKey = this.getUserStorageKey(currentUserId);
+        localStorage.removeItem(storageKey);
+      }
     }
   }
-
   private saveToStorage(): void {
+    const currentUserId = this.tokenService.getUserId();
+    if (!currentUserId) {
+      console.warn(
+        'No hay usuario autenticado, no se pueden guardar las sesiones.'
+      );
+      return;
+    }
+
     try {
-      const sessions = this.sessionsSubject.value;
+      const userSessions = this.getUserSessions();
       const currentSession = this.currentSessionSubject.value;
 
       const data: ChatStorage = {
-        sessions,
+        sessions: userSessions,
         currentSessionId: currentSession?.id || null,
         lastCleanup: Date.now(),
       };
 
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
+      const storageKey = this.getUserStorageKey(currentUserId);
+      localStorage.setItem(storageKey, JSON.stringify(data));
     } catch (error) {
       console.error('Error saving chat sessions to storage:', error);
     }
   }
-
   private cleanupOldSessions(): void {
-    const sessions = this.sessionsSubject.value;
+    const currentUserId = this.tokenService.getUserId();
+    if (!currentUserId) {
+      return;
+    }
+
+    const userSessions = this.getUserSessions();
     const now = Date.now();
 
-    const filteredSessions = sessions.filter((session) => {
+    const filteredSessions = userSessions.filter((session) => {
       return now - session.updatedAt < this.CLEANUP_INTERVAL;
     });
 
-    if (filteredSessions.length !== sessions.length) {
-      this.sessionsSubject.next(filteredSessions);
+    if (filteredSessions.length !== userSessions.length) {
+      this.updateUserSessions(filteredSessions);
       this.saveToStorage();
       console.log(
         `Cleaned up ${
-          sessions.length - filteredSessions.length
-        } old chat sessions`
+          userSessions.length - filteredSessions.length
+        } old chat sessions for user ${currentUserId}`
       );
     }
   }

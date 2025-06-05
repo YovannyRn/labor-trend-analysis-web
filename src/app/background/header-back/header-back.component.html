@@ -15,7 +15,6 @@
         <i class="bi bi-person-fill"></i>
       </span>
 
-      <!-- Popup de información del usuario -->
       <div class="user-popup" *ngIf="showUserPopup">
         <div class="popup-header">
           <h5>Información del Usuario</h5>
@@ -68,8 +67,6 @@
       Cerrar Sesión
     </button>
   </div>
-
-  <!-- Overlay para cerrar el popup al hacer clic fuera -->
   <div
     class="popup-overlay"
     *ngIf="showUserPopup"

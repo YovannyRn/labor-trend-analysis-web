@@ -94,7 +94,6 @@ export class SidebarChatComponent implements OnInit, OnDestroy {
     this.editingTitle = session.title;
     this.isEditingTitle = true;
 
-    // Focus en el input después del siguiente ciclo de rendering
     setTimeout(() => {
       const input = document.querySelector(
         'input[type="text"]'
@@ -117,14 +116,12 @@ export class SidebarChatComponent implements OnInit, OnDestroy {
     this.cancelEditing();
   }
 
-  // Cancelar edición
   cancelEditing(): void {
     this.editingSessionId = null;
     this.editingTitle = '';
     this.isEditingTitle = false;
   }
 
-  // Manejar teclas en edición de título
   onTitleKeyPress(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       this.saveTitle();
@@ -133,7 +130,6 @@ export class SidebarChatComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Formatear fecha de última actualización
   formatLastUpdate(timestamp: number): string {
     const now = Date.now();
     const diff = now - timestamp;
@@ -161,28 +157,23 @@ export class SidebarChatComponent implements OnInit, OnDestroy {
     return text.length > 60 ? text.substring(0, 57) + '...' : text;
   }
 
-  // Verificar si la sesión está activa
   isSessionActive(session: ChatSession): boolean {
     return this.currentSession?.id === session.id;
   }
 
-  // Obtener icono según el tipo de contenido
+
   getSessionIcon(session: ChatSession): string {
     if (session.hasGraphics) return 'bi bi-chat-left-fill';
     return 'bi-chat-left-fill';
   }
-  // Limpiar todas las sesiones
   clearAllChats(): void {
     if (confirm('¿Estás seguro de que quieres eliminar todos los chats?')) {
-      // Crear una copia del array para iterar de forma segura
       const sessionsToDelete = [...this.sessions];
-
-      // Eliminar todas las sesiones
       sessionsToDelete.forEach((session) => {
         this.chatStorageService.deleteSession(session.id);
       });
 
-      // Crear una nueva sesión vacía
+
       this.createNewChat();
     }
   }

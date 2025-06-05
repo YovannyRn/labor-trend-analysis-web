@@ -75,8 +75,8 @@
 
   .charts-section {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas iguales */
-    gap: 2rem; /* Espacio entre las gráficas */
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 2rem; 
     margin-bottom: 2rem;
   }
 
