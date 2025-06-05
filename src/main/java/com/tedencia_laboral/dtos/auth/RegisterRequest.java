@@ -1,20 +1,16 @@
 package com.tedencia_laboral.dtos.auth;
 
-import com.tedencia_laboral.enums.RoleName;
-
 public class RegisterRequest {
 
     private String username;
     private String password;
-    private RoleName roleName;
     private String firstName;
     private String lastName;
     private String address;
 
-    public RegisterRequest(String username, String password, RoleName roleName, String firstName, String lastName, String address) {
+    public RegisterRequest(String username, String password, String firstName, String lastName, String address) {
         this.username = username;
         this.password = password;
-        this.roleName = roleName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -34,14 +30,6 @@ public class RegisterRequest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public RoleName getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(RoleName roleName) {
-        this.roleName = roleName;
     }
 
     public String getFirstName() {

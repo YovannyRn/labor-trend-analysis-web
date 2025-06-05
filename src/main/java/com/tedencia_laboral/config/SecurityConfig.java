@@ -31,7 +31,6 @@ public class SecurityConfig {
         return username -> userRepository.findByUsername(username)
                 .map(user -> org.springframework.security.core.userdetails.User.withUsername(user.getUsername())
                         .password(user.getPassword())
-                        .authorities(user.getRole().getRoleName().name())
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
@@ -39,19 +38,18 @@ public class SecurityConfig {
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(UserDetailsService userDetailsService) {
         return new JwtAuthenticationFilter(jwtUtil, userDetailsService);
-    }
-
-    @Bean
+    }    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
+                .authorizeHttpRequests(auth -> auth                        .requestMatchers(
                                 "/users/login",
                                 "/users",
                                 "/users/register",
                                 "/users/check-token",
                                 "/user-info/{userId}",
-                                "/n8n/process"
+                                "/delete/{id}",
+                                "/n8n/process",
+                                "/chat-history/**"
                         )
                         .permitAll()
                         .anyRequest()

@@ -7,20 +7,19 @@ package com.tedencia_laboral.dtos.auth;
         private String firstName;
         private String lastName;
         private String address;
-        private String roleName;
 
         // Constructor vacío (necesario para deserialización)
         public UserResponse() {
         }
 
         // Constructor con todos los campos
-        public UserResponse(Long id, String username, String firstName, String lastName, String address, String roleName) {
+        public UserResponse(Long id, String username, String firstName, String lastName, String address) {
             this.id = id;
             this.username = username;
             this.firstName = firstName;
             this.lastName = lastName;
             this.address = address;
-            this.roleName = roleName;
+
         }
 
         // Getters y Setters
@@ -64,12 +63,5 @@ package com.tedencia_laboral.dtos.auth;
             this.address = address;
         }
 
-        public String getRoleName() {
-            return roleName;
-        }
-
-        public void setRoleName(String roleName) {
-            this.roleName = roleName;
-        }
     }
 

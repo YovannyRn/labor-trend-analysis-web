@@ -8,7 +8,6 @@ import com.tedencia_laboral.models.User;
 import com.tedencia_laboral.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,11 +49,23 @@ public class UserController {
         catch (IllegalArgumentException e) {
             return ResponseEntity.status(401).body(e.getMessage());
         }
-    }
-
-    @PostMapping("/check-token")
+    }    @PostMapping("/check-token")
     public ResponseEntity<Boolean> checkToken(@RequestBody CheckTokenRequest checkTokenRequest) {
         return ResponseEntity.ok(this.userService.checkToken(checkTokenRequest));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        try {
+            this.userService.deleteUserById(id);
+            return ResponseEntity.ok().body("Usuario eliminado exitosamente");
+        }
+        catch (IllegalArgumentException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(500).body("Error interno al eliminar usuario: " + e.getMessage());
+        }
     }
 
 
