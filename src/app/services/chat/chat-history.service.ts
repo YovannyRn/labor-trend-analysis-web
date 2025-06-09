@@ -71,7 +71,6 @@ export class ChatHistoryService {
     });
   }
 
-
   searchChatHistory(query: string): Observable<ChatHistoryEntry[]> {
     const params = new HttpParams().set('q', query);
 

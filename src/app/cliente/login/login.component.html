@@ -7,7 +7,7 @@
   <!-- From Uiverse.io by micaelgomestavares -->
   <form class="form" [formGroup]="loginForm" (ngSubmit)="submit()">
     <div class="flex-column">
-      <label>Email </label>
+      <label>Usuario</label>
     </div>
 
     <div class="inputForm">
@@ -26,13 +26,13 @@
       <input
         type="text"
         class="input"
-        placeholder="Enter your Email"
+        placeholder="Ingrese su Usuario"
         formControlName="username"
       />
     </div>
 
     <div class="flex-column">
-      <label>Password </label>
+      <label>Contraseña </label>
     </div>
 
     <div class="inputForm">
@@ -52,7 +52,7 @@
       <input
         type="password"
         class="input"
-        placeholder="Enter your Password"
+        placeholder="Ingrese su Contraseña"
         formControlName="password"
       />
       <svg
@@ -66,24 +66,24 @@
       </svg>
     </div>
 
-    <div class="flex-row">
+    <!-- <div class="flex-row">
       <div>
         <input class="form-check-input" type="checkbox" />
         <label class="ms-2">Remember me </label>
       </div>
       <span class="span">Forgot password?</span>
-    </div>
+    </div> -->
 
     <button class="button-submit" [disabled]="loginForm.invalid" type="submit">
       Sign In
     </button>
     <p class="p">
-      Don't have an account?
-      <span class="span" routerLink="/registro">Sign Up</span>
+      No tienes cuenta?
+      <span class="span" routerLink="/registro">Regístrate</span>
     </p>
-    <p class="p line">Or With</p>
+    <!-- <p class="p line">Or With</p> -->
 
-    <div class="flex-row">
+    <!-- <div class="flex-row">
       <button class="btn google">
         <img src="descarga.png" alt="" width="22" height="22" />
         Google
@@ -115,6 +115,6 @@
         </svg>
         Apple
       </button>
-    </div>
+    </div> -->
   </form>
 </body>

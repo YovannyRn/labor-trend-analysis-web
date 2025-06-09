@@ -1,9 +1,10 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { PantallazoComponent } from "../pantallazo/pantallazo.component";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-principal',
-  imports: [PantallazoComponent],
+  imports: [PantallazoComponent, RouterLink],
   templateUrl: './principal.component.html',
   styleUrl: './principal.component.scss'
 })
