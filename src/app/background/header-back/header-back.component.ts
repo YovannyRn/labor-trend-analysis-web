@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { UseStateService } from '../../services/auth/use-state.service';
 import { TokenService } from '../../services/auth/token.service';
@@ -15,6 +15,8 @@ import { ChatStorageService } from '../../services/chat/chat-storage.service';
   styleUrl: './header-back.component.scss',
 })
 export class HeaderBackComponent implements OnInit {
+  @Output() sidebarToggleRequested = new EventEmitter<void>();
+
   username: string = '';
   userInfo: UserInfo | null = null;
   showUserPopup: boolean = false;
@@ -45,7 +47,6 @@ export class HeaderBackComponent implements OnInit {
     this.isLoadingUserInfo = true;
 
     const userId = this.tokenService.getUserId();
-
 
     if (!userId) {
       this.isLoadingUserInfo = false;
@@ -93,5 +94,9 @@ export class HeaderBackComponent implements OnInit {
       this.popupService.close();
       this.router.navigate(['/login']);
     }, 1500);
+  }
+
+  toggleMobileSidebar(): void {
+    this.sidebarToggleRequested.emit();
   }
 }

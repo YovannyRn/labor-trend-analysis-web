@@ -1,4 +1,12 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  OnInit,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { N8nService } from '../../services/n8n/n8n.service';
@@ -36,8 +44,10 @@ import {
   templateUrl: './layout-search.component.html',
   styleUrl: './layout-search.component.scss',
 })
-export class LayoutSearchComponent implements OnInit {
+export class LayoutSearchComponent implements OnInit, OnChanges {
   @ViewChild('chatMessages') chatMessagesRef!: ElementRef;
+  @Input() mobileSidebarToggleRequested: boolean = false;
+
   // Propiedades de UI
   searchText = '';
   isChatMode = false;
@@ -51,6 +61,7 @@ export class LayoutSearchComponent implements OnInit {
   sourcesData: any = null;
   showSidebar = true; // Mostrar el sidebar de chat
   isSidebarCollapsed = false; // Estado de colapso del sidebar
+  isMobileView = false; // Para detectar vista móvil
   // Cache y flags
   private queryCache = new Map<string, N8nResponse>();
   private isGraphRequested = false;
@@ -63,22 +74,39 @@ export class LayoutSearchComponent implements OnInit {
     private responseValidator: ResponseValidatorService,
     private chatSessionManager: ChatSessionManagerService
   ) {}
+
   ngOnInit() {
+    // Detectar vista móvil
+    this.checkMobileView();
+    window.addEventListener('resize', () => this.checkMobileView());
 
     const currentSession = this.chatStorageService.getCurrentSession();
     if (currentSession) {
       this.onSessionChanged(currentSession);
     } else {
-
       this.chatStorageService.createNewSession();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['mobileSidebarToggleRequested'] && this.isMobileView) {
+      this.showSidebar = !this.showSidebar;
+    }
+  }
+  private checkMobileView(): void {
+    this.isMobileView = window.innerWidth <= 900;
+    if (this.isMobileView) {
+      // En móvil, ocultar el sidebar por defecto
+      this.showSidebar = false;
+    } else {
+      // En desktop, mostrar el sidebar por defecto
+      this.showSidebar = true;
     }
   }
   async sendSearch(tipo?: 'grafica' | 'fuentes') {
     // Verificar autenticación primero
     const userId = this.tokenService.getUserId();
     const userName = this.tokenService.getUsername();
-
-
 
     if (!userId || !userName) {
       this.chatHistory.push({
@@ -122,7 +150,7 @@ export class LayoutSearchComponent implements OnInit {
       this.isGraphRequested = false;
       this.isSourcesRequested = false;
       this.searchText = '';
-      this.chatHistory.push({ user: message }); 
+      this.chatHistory.push({ user: message });
       this.chatSessionManager.saveMessageToSession({ user: message });
 
       this.chatStorageService.updateLastUserQuery(message);
@@ -170,7 +198,6 @@ export class LayoutSearchComponent implements OnInit {
         if (this.handleSourcesResponse(response)) {
           return;
         }
-
       } else {
         //  Ocultar componentes si no es tipo especial
         /** TODO: Implementar lógica para ocultar componentes */
@@ -405,11 +432,15 @@ export class LayoutSearchComponent implements OnInit {
   get hasLastQuery(): boolean {
     return this.lastUserQuery.trim().length > 0;
   }
- 
+
   /**
    * Maneja el evento cuando se selecciona una sesión de chat diferente
-   */
-  onSessionChanged(session: ChatSession): void {
+   */ onSessionChanged(session: ChatSession): void {
+    // Cerrar sidebar en móvil cuando se selecciona una sesión
+    if (this.isMobileView) {
+      this.showSidebar = false;
+    }
+
     // Limpiar la interfaz actual
     this.showMultipleGraphsComponent = false;
     this.showSourcesComponent = false;
@@ -451,8 +482,12 @@ export class LayoutSearchComponent implements OnInit {
       this.isSourcesRequested = false;
     }
   }
-
   onNewChatRequested(): void {
+    // Cerrar sidebar en móvil cuando se crea un nuevo chat
+    if (this.isMobileView) {
+      this.showSidebar = false;
+    }
+
     // Limpiar el estado actual
     this.chatHistory = [];
     this.lastUserQuery = '';
@@ -485,7 +520,6 @@ export class LayoutSearchComponent implements OnInit {
   onNewSession(): void {
     this.onNewChatRequested();
   }
-
 
   private isValidSource(source: unknown): boolean {
     return !!source && typeof source === 'string' && source.trim().length > 3;

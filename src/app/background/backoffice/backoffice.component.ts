@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { LayoutSearchComponent } from '../layout-search/layout-search.component';
 
 @Component({
   selector: 'app-backoffice',
   standalone: true,
-  imports: [
-    LayoutSearchComponent
-  ],
+  imports: [LayoutSearchComponent],
   templateUrl: './backoffice.component.html',
   styleUrls: ['./backoffice.component.scss'],
 })
-export class BackofficeComponent {}
+export class BackofficeComponent {
+  @Input() mobileSidebarToggleRequested: boolean = false;
+}

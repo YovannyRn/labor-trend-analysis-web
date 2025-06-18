@@ -5,6 +5,10 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
+
+  @media (max-width: 767.98px) {
+    min-height: 100vh;
+  }
 }
 
 #video1 {
@@ -21,7 +25,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3),
+    rgba(0, 0, 0, 0.7)
+  );
   z-index: 1;
 }
 
@@ -32,53 +40,82 @@
   transform: translate(-50%, -50%);
   color: white;
   text-align: center;
-  z-index: 2; /* Asegúrate de que esté por encima del degradado */
+  z-index: 2;
   padding: 1rem;
   border-radius: 10px;
+  max-width: 90%;
+
+  h1 {
+    font-size: 2.5rem;
+
+    // Responsive typography
+    @media (max-width: 767.98px) {
+      font-size: 1.8rem;
+    }
+
+    @media (min-width: 768px) and (max-width: 991.98px) {
+      font-size: 2.2rem;
+    }
+  }
+
+  p {
+    font-size: 1.2rem;
+
+    @media (max-width: 767.98px) {
+      font-size: 1rem;
+    }
+  }
 }
 
 #botones-video {
-  position: absolute;
-  margin-top: 50px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
-  text-align: center;
-  z-index: 2; /* Asegúrate de que los botones estén encima del video y el degradado */
-  padding: 1rem;
-  border-radius: 10px;
+  margin-top: 2rem;
+
+  // Remove absolute positioning conflicts
+  position: static;
+  transform: none;
+  left: auto;
+
+  @media (max-width: 575.98px) {
+    margin-top: 1.5rem;
+  }
+}
+
+#boton1,
+#boton2 {
+  border-radius: 3rem;
+  height: 3rem;
+  width: 10rem;
+  color: azure;
+  background-color: black;
+  border: 2px solid rgb(20, 20, 20);
+  transition: all 0.3s ease;
+
+  // Responsive button sizing
+  @media (max-width: 575.98px) {
+    width: 9rem;
+    height: 2.8rem;
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    width: 9.5rem;
+    height: 2.9rem;
+  }
 }
 
 #boton1 {
-  margin-right: 10px;
-  border-radius: 3rem;
-  height: 3rem;
-  width: 10rem;
-  color: azure;
-  background-color: black;
-  border: 2px solid rgb(20, 20, 20);
   animation: glow 2s infinite ease-in-out;
-  transition: 3s;
-}
 
-#boton1:hover {
-  background-color: rgb(19, 140, 173);
-  border-color: aqua;
+  &:hover {
+    background-color: rgb(19, 140, 173);
+    border-color: aqua;
+  }
 }
 
 #boton2 {
-  margin-left: 10px;
-  border-radius: 3rem;
-  height: 3rem;
-  width: 10rem;
-  color: azure;
-  background-color: black;
-  border: 2px solid rgb(20, 20, 20);
-  transition: 3s;
-}
-
-#boton2:hover {
-  background-color: rgb(32, 32, 32);
+  &:hover {
+    background-color: rgb(32, 32, 32);
+  }
 }
 
 #menu {
@@ -88,6 +125,10 @@
   white-space: nowrap;
   width: 100%;
   background-color: rgba(0, 0, 0, 0);
+
+  @media (max-width: 767.98px) {
+    bottom: 3%;
+  }
 }
 
 #menu ul {
@@ -104,6 +145,16 @@
   font-size: 1.5rem;
   color: rgb(255, 255, 255);
   white-space: nowrap;
+
+  @media (max-width: 767.98px) {
+    margin: 0 2rem;
+    font-size: 1.2rem;
+  }
+
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    margin: 0 3rem;
+    font-size: 1.3rem;
+  }
 }
 
 @keyframes scrollLeft {

@@ -128,6 +128,12 @@ body {
   border: 1px solid #030508;
   color: #0d0d12;
 }
+@media screen and (max-width: 900px) {
+  body {
+    margin-top: -97px !important;
+  }
+  
+}
 
 /* Animación de fade-in */
 @keyframes fadeIn {

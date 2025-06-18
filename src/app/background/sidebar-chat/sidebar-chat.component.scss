@@ -106,6 +106,20 @@
   }
 }
 
+
+@media (max-width: 900px) {
+  .sidebar-chat {
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+
+    &.collapsed {
+      min-width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
