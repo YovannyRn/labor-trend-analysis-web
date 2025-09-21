@@ -36,7 +36,7 @@ public class N8nController {
     @PostMapping("/process")
     public ResponseEntity<N8nResponse> sendToN8n(@RequestBody N8nRequest userRequest) {
         try {
-            String n8nEndpoint = n8nUrl + "/webhook/process-user-request";
+            String n8nEndpoint = n8nUrl + "/webhook-test/process-user-request";
 
             String rawResponse = restTemplate.postForObject(n8nEndpoint, userRequest, String.class);
 
