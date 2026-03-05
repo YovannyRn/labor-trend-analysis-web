@@ -1,0 +1,32 @@
+spring.application.name=tendencia-mercado-laboral
+
+# Puerto por defecto de SpringBoot: 8080
+server.port=8080
+
+# CONFIGURACIÓN DE BASE DE DATOS (MySQL)
+spring.datasource.url=jdbc:mysql://localhost:3306/YOUR_DATABASE_NAME
+spring.datasource.username=YOUR_DB_USERNAME
+spring.datasource.password=YOUR_DB_PASSWORD
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# JPA / Hibernate
+spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.hibernate.ddl-auto=update
+
+# Solo en fase de pruebas
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+
+# CONFIGURACIÓN DE LOGGING
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+
+server.servlet.context-path=/api
+
+# URL del servidor n8n
+n8n.url=http://localhost:5678
+
+# JWT - generar un secret seguro (mínimo 256 bits en hex)
+jwt.secret=YOUR_JWT_SECRET_HEX_STRING
+# 1 día en milisegundos
+jwt.expiration=86400000
