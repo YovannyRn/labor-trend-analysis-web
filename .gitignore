@@ -40,3 +40,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Environment files with sensitive data - use environment.example.ts as template
+src/environments/environment.local.ts
