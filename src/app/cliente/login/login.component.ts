@@ -24,6 +24,7 @@ import { ChatStorageService } from '../../services/chat/chat-storage.service';
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  showPassword = false;
   constructor(
     private tokenService: TokenService,
     private credentialsService: CredentialsService,
@@ -31,7 +32,7 @@ export class LoginComponent {
     private router: Router,
     private popupService: PopupService,
     private useStateService: UseStateService,
-    private chatStorageService: ChatStorageService
+    private chatStorageService: ChatStorageService,
   ) {
     this.loginForm = this.formBuilder.group({
       username: ['', [Validators.required]],
@@ -72,7 +73,7 @@ export class LoginComponent {
           this.popupService.showMessage(
             'Ups ha ocurrido un error',
             message,
-            'error'
+            'error',
           );
         },
       });

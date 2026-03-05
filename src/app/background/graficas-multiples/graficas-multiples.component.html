@@ -1,15 +1,15 @@
 <!-- Contenedor Principal de Gráficas Múltiples -->
-<div class="container-fluid bg-dark p-4 rounded-3 shadow charts-main">
+<div class="container-fluid p-4 rounded-3 charts-main">
   <!-- Header con botón de cerrar -->
   <div
-    class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-secondary"
+    class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom charts-header-row"
   >
-    <h3 class="text-light fw-normal mb-0 charts-title">
-      <i class="bi bi-bar-chart-line me-2 text-info"></i>
+    <h3 class="fw-semibold mb-0 charts-title">
+      <i class="bi bi-bar-chart-line me-2 text-primary"></i>
       Análisis Completo del Mercado Laboral
     </h3>
     <button
-      class="btn btn-outline-light btn-sm rounded-circle p-2 charts-close-btn"
+      class="btn charts-close-btn"
       (click)="closeCharts()"
       aria-label="Cerrar gráficas"
     >
@@ -18,13 +18,13 @@
   </div>
   <div class="row g-4">
     <div class="col-xl-6 col-lg-12" *ngIf="salaryByLevelData.length > 0">
-      <div class="card bg-secondary border-0 shadow-sm h-100 chart-card">
+      <div class="card border h-100 chart-card">
         <div class="card-header bg-transparent border-0 text-center py-3">
-          <h5 class="card-title text-light mb-1 fw-normal">
-            <i class="bi bi-clipboard2-pulse me-2 text-info"></i>
+          <h5 class="card-title mb-1 fw-semibold chart-card-title">
+            <i class="bi bi-clipboard2-pulse me-2 text-primary"></i>
             Salarios por Experiencia
           </h5>
-          <p class="card-subtitle text-muted small mb-0">
+          <p class="card-subtitle chart-card-subtitle small mb-0">
             Comparación salarial por nivel profesional
           </p>
         </div>
@@ -50,13 +50,13 @@
       </div>
     </div>
     <div class="col-xl-6 col-lg-12" *ngIf="salaryByRegionData.length > 0">
-      <div class="card bg-secondary border-0 shadow-sm h-100 chart-card">
+      <div class="card border h-100 chart-card">
         <div class="card-header bg-transparent border-0 text-center py-3">
-          <h5 class="card-title text-light mb-1 fw-normal">
+          <h5 class="card-title mb-1 fw-semibold chart-card-title">
             <i class="bi bi-geo me-2 text-primary"></i>
             Salarios por Región
           </h5>
-          <p class="card-subtitle text-muted small mb-0">
+          <p class="card-subtitle chart-card-subtitle small mb-0">
             Distribución geográfica de salarios
           </p>
         </div>
@@ -78,13 +78,13 @@
       </div>
     </div>
     <div class="col-xl-6 col-lg-12" *ngIf="skillsData.length > 0">
-      <div class="card bg-secondary border-0 shadow-sm h-100 chart-card">
+      <div class="card border h-100 chart-card">
         <div class="card-header bg-transparent border-0 text-center py-3">
-          <h5 class="card-title text-light mb-1 fw-normal">
+          <h5 class="card-title mb-1 fw-semibold chart-card-title">
             <i class="bi bi-lightning me-2 text-warning"></i>
             Habilidades Mejor Pagadas
           </h5>
-          <p class="card-subtitle text-muted small mb-0">
+          <p class="card-subtitle chart-card-subtitle small mb-0">
             Tecnologías con mayor remuneración ({{ skillsData.length }} items)
           </p>
         </div>
@@ -110,19 +110,19 @@
       </div>
     </div>
     <div class="col-xl-6 col-lg-12" *ngIf="trendsInfo && hasKeys(trendsInfo)">
-      <div class="card bg-secondary border-0 shadow-sm h-100 chart-card">
+      <div class="card border h-100 chart-card">
         <div class="card-header bg-transparent border-0 text-center py-3">
-          <h5 class="card-title text-light mb-1 fw-normal">
+          <h5 class="card-title mb-1 fw-semibold chart-card-title">
             <i class="bi bi-graph-up-arrow me-2 text-success"></i>
             Tendencias del Mercado
           </h5>
-          <p class="card-subtitle text-muted small mb-0">
+          <p class="card-subtitle chart-card-subtitle small mb-0">
             Análisis y proyecciones laborales
           </p>
         </div>
         <div class="card-body">
           <div class="mb-4" *ngIf="trendsInfo.factores_incremento">
-            <h6 class="text-light fw-normal mb-3">
+            <h6 class="trend-section-title fw-semibold mb-3">
               <i class="bi bi-rocket-takeoff text-success me-2"></i>
               Factores de Crecimiento
             </h6>
@@ -132,32 +132,28 @@
                 class="d-flex align-items-start mb-2 factor-item"
               >
                 <i class="bi bi-arrow-up-circle text-success me-2 mt-1"></i>
-                <span class="text-light small">{{ factor }}</span>
+                <span class="trend-text small">{{ factor }}</span>
               </li>
             </ul>
           </div>
           <div class="mb-4" *ngIf="trendsInfo.demanda_mercado">
-            <h6 class="text-light fw-normal mb-3">
+            <h6 class="trend-section-title fw-semibold mb-3">
               <i class="bi bi-bar-chart text-primary me-2"></i>
               Demanda Actual
             </h6>
-            <div
-              class="p-3 bg-dark rounded-2 border-start border-4 border-primary"
-            >
-              <span class="text-light small">{{
+            <div class="trend-info-box trend-info-blue">
+              <span class="trend-text small">{{
                 trendsInfo.demanda_mercado
               }}</span>
             </div>
           </div>
           <div class="mb-0" *ngIf="trendsInfo.proyeccion_2025">
-            <h6 class="text-light fw-normal mb-3">
+            <h6 class="trend-section-title fw-semibold mb-3">
               <i class="bi bi-crystal-ball text-info me-2"></i>
               Proyección 2025
             </h6>
-            <div
-              class="p-3 bg-dark rounded-2 border-start border-4 border-info"
-            >
-              <span class="text-light small">{{
+            <div class="trend-info-box trend-info-teal">
+              <span class="trend-text small">{{
                 trendsInfo.proyeccion_2025
               }}</span>
             </div>
@@ -175,7 +171,7 @@
     class="text-center py-5"
   >
     <i class="bi bi-bar-chart fs-1 text-muted mb-3"></i>
-    <h5 class="text-light mb-2">No hay datos disponibles para mostrar</h5>
+    <h5 class="empty-title mb-2">No hay datos disponibles para mostrar</h5>
     <p class="text-muted small">
       Los datos de gráficas múltiples no están disponibles en este momento.
     </p>

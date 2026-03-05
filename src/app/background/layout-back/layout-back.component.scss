@@ -1,3 +1,9 @@
 .container-back {
-    background-color: #424242;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  transition: background-color 0.3s ease;
+}
+
+:host-context(body.dark-mode) .container-back {
+  background-color: #0d1117;
 }

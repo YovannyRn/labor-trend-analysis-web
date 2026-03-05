@@ -68,6 +68,19 @@
       </div>
     </div>
 
+    <button
+      class="theme-toggle-btn ms-2"
+      (click)="toggleTheme()"
+      [title]="
+        themeService.isDark() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'
+      "
+    >
+      <i
+        class="bi"
+        [class.bi-moon-stars-fill]="!themeService.isDark()"
+        [class.bi-sun-fill]="themeService.isDark()"
+      ></i>
+    </button>
     <button class="logout-btn ms-3 me-5" (click)="closeSession()">
       Cerrar Sesión
     </button>

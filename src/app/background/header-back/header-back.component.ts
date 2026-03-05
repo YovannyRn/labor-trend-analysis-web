@@ -7,6 +7,7 @@ import { UserInfoService } from '../../services/auth/user-info.service';
 import { UserInfo } from '../../services/interfaces/user-info';
 import { CommonModule } from '@angular/common';
 import { ChatStorageService } from '../../services/chat/chat-storage.service';
+import { ThemeService } from '../../services/utils/theme.service';
 
 @Component({
   selector: 'app-header-back',
@@ -27,7 +28,8 @@ export class HeaderBackComponent implements OnInit {
     private tokenService: TokenService,
     private userStateService: UseStateService,
     private userInfoService: UserInfoService,
-    private chatStorageService: ChatStorageService
+    private chatStorageService: ChatStorageService,
+    public themeService: ThemeService,
   ) {}
   ngOnInit(): void {
     this.username = this.userStateService.getUsername() || 'Usuario';
@@ -98,5 +100,9 @@ export class HeaderBackComponent implements OnInit {
 
   toggleMobileSidebar(): void {
     this.sidebarToggleRequested.emit();
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggle();
   }
 }

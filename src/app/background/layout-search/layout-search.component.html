@@ -4,7 +4,7 @@
   [ngClass]="{
     'chat-mode': isChatMode,
     'initial-mode': !isChatMode,
-    'sidebar-visible': showSidebar
+    'sidebar-visible': showSidebar,
   }"
 >
   <!-- Sidebar de chat -->
@@ -12,7 +12,7 @@
     class="sidebar-container position-relative"
     [ngClass]="{
       'sidebar-collapsed': isSidebarCollapsed,
-      'sidebar-hidden': !showSidebar
+      'sidebar-hidden': !showSidebar,
     }"
     *ngIf="showSidebar"
   >
@@ -209,10 +209,10 @@
         </div>
 
         <!-- Input del chat -->
-        <div class="chat-input-container p-3 w-75 m-auto bg-dark bg-opacity-95">
-          <div class="input-wrapper position-relative">
+        <div class="chat-input-bar">
+          <div class="chat-input-wrapper">
             <textarea
-              class="form-control chat-textarea-small bg-secondary border-secondary text-white rounded-pill"
+              class="chat-input-field"
               placeholder="Continúa la conversación..."
               [(ngModel)]="searchText"
               (keydown.enter)="handleEnter($event)"
@@ -222,7 +222,7 @@
             ></textarea>
             <button
               type="button"
-              class="btn btn-success rounded-circle send-button-small position-absolute top-50 end-0 translate-middle-y me-2"
+              class="chat-send-btn"
               (click)="sendSearchWithAnimation()"
               [disabled]="!searchText.trim() || loading"
               [ngClass]="{ 'send-anim': sendAnimating }"
@@ -230,25 +230,22 @@
               <i class="bi bi-arrow-up"></i>
             </button>
           </div>
-          <div
-            class="quick-actions-chat d-flex gap-2 justify-content-center mt-3"
-            *ngIf="hasLastQuery"
-          >
+          <div class="chat-quick-actions" *ngIf="hasLastQuery">
             <button
-              class="btn btn-outline-primary btn-sm rounded-pill"
+              class="quick-btn quick-btn-graph"
               (click)="sendSearch('grafica')"
               [disabled]="loading"
               title="Generar gráfica de la última consulta"
             >
-              <i class="bi bi-pie-chart-fill"></i> Gráfica
+              <i class="bi bi-bar-chart-fill"></i> Gráfica
             </button>
             <button
-              class="btn btn-outline-success btn-sm rounded-pill"
+              class="quick-btn quick-btn-sources"
               (click)="sendSearch('fuentes')"
               [disabled]="loading"
               title="Ver fuentes de la última consulta"
             >
-              <i class="bi bi-chat-text-fill"></i> Fuentes
+              <i class="bi bi-journals"></i> Fuentes
             </button>
           </div>
         </div>

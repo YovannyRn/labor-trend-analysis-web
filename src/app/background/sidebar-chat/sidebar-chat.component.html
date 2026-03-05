@@ -1,27 +1,24 @@
 <div
-  class="sidebar-chat h-100 d-flex flex-column bg-gradient-primary border-end"
+  class="sidebar-shell h-100 d-flex flex-column"
   [class.collapsed]="isCollapsed"
 >
-  <!-- Header del Sidebar -->
-  <div
-    class="p-3 border-bottom border-light border-opacity-25 bg-dark bg-opacity-25"
-  >
-    <div class="d-flex justify-content-between align-items-center">
-      <h5 class="text-white m-0 fw-semibold" *ngIf="!isCollapsed">
-        <i class="bi bi-chat-dots me-2"></i>
-        Mis Chats
-      </h5>
-      <div class="d-flex gap-2">
+  <!-- Header -->
+  <div class="sidebar-header">
+    <div class="sidebar-header-inner">
+      <span class="sidebar-title" *ngIf="!isCollapsed">
+        <i class="bi bi-layout-text-sidebar-reverse me-2"></i>Mis Chats
+      </span>
+      <div class="sidebar-header-actions">
         <button
-          class="btn btn-sm btn-outline-light bg-white bg-opacity-25"
+          class="sidebar-btn-new"
           (click)="createNewChat()"
-          [title]="isCollapsed ? 'Nuevo Chat' : ''"
+          title="Nuevo chat"
           *ngIf="!isCollapsed"
         >
-          <i class="bi bi-plus me-1"></i>
-          Nuevo</button
-        ><button
-          class="btn bg-white bg-opacity-10 text-white pe-2"
+          <i class="bi bi-plus"></i> Nuevo
+        </button>
+        <button
+          class="sidebar-btn-toggle"
           (click)="toggleSidebar()"
           [title]="isCollapsed ? 'Expandir' : 'Colapsar'"
         >
@@ -34,140 +31,107 @@
       </div>
     </div>
   </div>
-  <!-- Lista de Sesiones -->
-  <div class="flex-grow-1 overflow-auto p-2 sessions-container">
+
+  <!-- Lista de sesiones -->
+  <div class="sessions-scroll flex-grow-1">
+    <!-- Sesiones -->
     <div
       *ngFor="let session of sessions; trackBy: trackBySessionId"
-      class="card mb-2 border-0 bg-white bg-opacity-10 session-item cursor-pointer"
-      [class.active]="isSessionActive(session)"
-      [class.bg-opacity-25]="isSessionActive(session)"
+      class="session-card"
+      [class.session-active]="isSessionActive(session)"
       (click)="selectSession(session)"
     >
-      <div class="card-body p-3 d-flex align-items-start gap-3">
-        <!-- Icono del tipo de contenido -->
-        <div class="text-white fs-5 session-icon">
-          <i [class]="getSessionIcon(session)"></i>
-        </div>
-        <!-- Contenido de la sesión -->
-        <div class="flex-grow-1 min-w-0 text-white" *ngIf="!isCollapsed">
-          <!-- Título editable -->
-          <div
-            class="d-flex justify-content-between align-items-start mb-2"
-            *ngIf="editingSessionId !== session.id"
-          >
-            <h6
-              class="mb-0 fw-medium lh-base text-break flex-grow-1 title-text"
-              [class.fw-semibold]="isSessionActive(session)"
+      <!-- Icono colapsado -->
+      <div
+        class="session-icon-collapsed"
+        *ngIf="isCollapsed"
+        [title]="session.title"
+      >
+        <i [class]="getSessionIcon(session)"></i>
+      </div>
+
+      <!-- Vista expandida -->
+      <div class="session-body" *ngIf="!isCollapsed">
+        <!-- Título + acciones -->
+        <div class="session-row" *ngIf="editingSessionId !== session.id">
+          <h6 class="session-title">{{ session.title }}</h6>
+          <div class="session-actions">
+            <button
+              class="sa-btn"
+              (click)="startEditingTitle(session, $event)"
+              title="Editar"
             >
-              {{ session.title }}
-            </h6>
-            <div class="d-flex gap-1 session-actions opacity-0">
-              <button
-                class="btn btn-sm p-1 text-white-50 btn-action edit-btn"
-                (click)="startEditingTitle(session, $event)"
-                title="Editar título"
-              >
-                <i class="bi bi-pencil"></i>
-              </button>
-              <button
-                class="btn btn-sm p-1 text-white-50 btn-action export-btn"
-                (click)="exportSession(session, $event)"
-                title="Exportar chat"
-              >
-                <i class="bi bi-download"></i>
-              </button>
-              <button
-                class="btn btn-sm p-1 text-white-50 btn-action delete-btn"
-                (click)="deleteSession(session, $event)"
-                title="Eliminar chat"
-              >
-                <i class="bi bi-trash"></i>
-              </button>
-            </div>
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button
+              class="sa-btn"
+              (click)="exportSession(session, $event)"
+              title="Exportar"
+            >
+              <i class="bi bi-download"></i>
+            </button>
+            <button
+              class="sa-btn sa-btn-del"
+              (click)="deleteSession(session, $event)"
+              title="Eliminar"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
           </div>
+        </div>
 
-          <!-- Campo de edición de título -->
-          <div class="mb-2" *ngIf="editingSessionId === session.id">
-            <input
-              type="text"
-              class="form-control form-control-sm mb-2 bg-white bg-opacity-90 text-dark"
-              [(ngModel)]="editingTitle"
-              (keydown)="onTitleKeyPress($event)"
-              (blur)="saveTitle()"
-              #titleInput
-            />
-            <div class="d-flex gap-1 justify-content-end">
-              <button
-                class="btn btn-success btn-sm px-2 py-1"
-                (click)="saveTitle()"
-              >
-                <i class="bi bi-check"></i>
-              </button>
-              <button
-                class="btn btn-secondary btn-sm px-2 py-1"
-                (click)="cancelEditing()"
-              >
-                <i class="bi bi-x"></i>
-              </button>
-            </div>
+        <!-- Edición de título -->
+        <div class="session-edit" *ngIf="editingSessionId === session.id">
+          <input
+            type="text"
+            class="session-input"
+            [(ngModel)]="editingTitle"
+            (keydown)="onTitleKeyPress($event)"
+            (blur)="saveTitle()"
+            #titleInput
+          />
+          <div class="d-flex gap-1 justify-content-end mt-1">
+            <button class="sa-btn sa-btn-ok" (click)="saveTitle()">
+              <i class="bi bi-check"></i>
+            </button>
+            <button class="sa-btn" (click)="cancelEditing()">
+              <i class="bi bi-x"></i>
+            </button>
           </div>
+        </div>
 
-          <!-- Preview del último mensaje -->
-          <p class="small text-white-50 mb-2 lh-sm session-preview">
-            {{ getLastMessagePreview(session) }}
-          </p>
+        <!-- Preview -->
+        <p class="session-preview">{{ getLastMessagePreview(session) }}</p>
 
-          <!-- Metadatos de la sesión -->
-          <div
-            class="d-flex justify-content-between align-items-center small text-white-50"
+        <!-- Meta -->
+        <div class="session-meta">
+          <span
+            ><i class="bi bi-chat-dots"></i> {{ session.messages.length }}</span
           >
-            <span class="d-flex align-items-center gap-1">
-              <i class="bi bi-chat-dots"></i>
-              {{ session.messages.length }}
-            </span>
-            <span class="d-flex align-items-center gap-1">
-              <i class="bi bi-clock"></i>
-              {{ formatLastUpdate(session.updatedAt) }}
-            </span>
-          </div>
+          <span
+            ><i class="bi bi-clock"></i>
+            {{ formatLastUpdate(session.updatedAt) }}</span
+          >
         </div>
       </div>
     </div>
 
-    <!-- Mensaje cuando no hay sesiones -->
-    <div
-      *ngIf="sessions.length === 0"
-      class="d-flex flex-column align-items-center justify-content-center p-4 text-center text-white-50"
-      style="height: 200px"
-    >
-      <div class="display-4 mb-3 opacity-50">
-        <i class="bi bi-chat-dots"></i>
-      </div>
-      <div *ngIf="!isCollapsed">
-        <p class="mb-2 fw-medium">No hay chats guardados</p>
-        <small class="opacity-75">Crea tu primer chat para comenzar</small>
-      </div>
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="sessions.length === 0 && !isCollapsed">
+      <div class="empty-icon"><i class="bi bi-chat-square-dots"></i></div>
+      <p class="empty-title">Sin conversaciones</p>
+      <small class="empty-sub">Crea tu primer chat para empezar</small>
     </div>
   </div>
 
-  <!-- Footer del Sidebar -->
-  <div
-    class="p-3 border-top border-light border-opacity-25 bg-dark bg-opacity-25"
-    *ngIf="!isCollapsed && sessions.length > 0"
-  >
-    <div class="mb-2">
-      <span class="small text-white-50 d-flex align-items-center gap-2">
-        <i class="bi bi-database"></i>
-        {{ sessions.length }} chats guardados
-      </span>
-    </div>
-    <button
-      class="btn btn-outline-danger btn-sm w-100"
-      (click)="clearAllChats()"
-      title="Limpiar todos los chats"
+  <!-- Footer -->
+  <div class="sidebar-footer" *ngIf="!isCollapsed && sessions.length > 0">
+    <span class="footer-count"
+      ><i class="bi bi-database me-1"></i>{{ sessions.length }} chats
+      guardados</span
     >
-      <i class="bi bi-trash me-1"></i>
-      Limpiar todo
+    <button class="footer-clear-btn" (click)="clearAllChats()">
+      <i class="bi bi-trash me-1"></i>Limpiar todo
     </button>
   </div>
 </div>

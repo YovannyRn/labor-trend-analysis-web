@@ -1,6 +1,6 @@
 <div class="sources-container">
   <div class="sources-header mb-3">
-    <h5 class="text-warning m-0">
+    <h5 class="m-0">
       <i class="bi bi-journal-text me-2"></i>
       Fuentes de Información ({{ processedSources.length }})
     </h5>
@@ -14,13 +14,13 @@
         let i = index;
         trackBy: trackByUrl
       "
-      class="source-item card bg-dark bg-opacity-50 border-secondary mb-2"
+      class="source-item card mb-2"
     >
       <div class="card-body p-3">
         <div class="d-flex align-items-start gap-3">
           <!-- Número de fuente -->
           <div
-            class="source-number bg-primary text-white rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+            class="source-number rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
             style="
               width: 30px;
               height: 30px;
@@ -34,29 +34,29 @@
           <!-- Contenido de la fuente -->
           <div class="flex-grow-1 min-w-0">
             <!-- Título de la fuente -->
-            <h6 class="text-white mb-2 fw-semibold">
+            <h6 class="source-title mb-2 fw-semibold">
               {{ source.title || "Fuente de información" }}
             </h6>
 
             <!-- Descripción -->
-            <p class="text-light mb-2 small" *ngIf="source.description">
+            <p class="source-description mb-2 small" *ngIf="source.description">
               {{ source.description }}
             </p>
 
             <!-- URL -->
             <div class="d-flex align-items-center gap-2 mb-2">
-              <i class="bi bi-link-45deg text-info"></i>
+              <i class="bi bi-link-45deg text-primary"></i>
               <a
                 [href]="source.url"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-info text-decoration-none small"
+                class="source-url text-decoration-none small"
                 [title]="source.url"
               >
                 {{ source.displayUrl }}
               </a>
               <button
-                class="btn btn-sm btn-outline-info py-0 px-1"
+                class="btn btn-sm btn-outline-secondary py-0 px-1"
                 (click)="copyToClipboard(source.url)"
                 title="Copiar URL"
               >
@@ -66,7 +66,7 @@
 
             <!-- Metadatos adicionales -->
             <div
-              class="d-flex gap-3 small text-white"
+              class="d-flex gap-3 small source-meta"
               *ngIf="source.domain || source.timestamp"
             >
               <span
@@ -101,11 +101,11 @@
 
   <!-- Footer con acciones -->
   <div
-    class="sources-footer mt-3 pt-3 border-top border-secondary"
+    class="sources-footer mt-3 pt-3 border-top"
     *ngIf="processedSources.length > 0"
   >
     <div class="d-flex justify-content-between align-items-center">
-      <small class="text-white">
+      <small class="source-meta">
         {{ processedSources.length }} fuente{{
           processedSources.length !== 1 ? "s" : ""
         }}

@@ -1,11 +1,28 @@
-body {
-  background: linear-gradient( #0d0d12, #1c1c24);
+:host {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.registro-page {
+  background:
+    radial-gradient(
+      ellipse at 20% 30%,
+      rgba(59, 91, 219, 0.18) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse at 80% 70%,
+      rgba(57, 188, 220, 0.13) 0%,
+      transparent 55%
+    ),
+    linear-gradient(160deg, #0a0d14 0%, #0d1117 50%, #10141e 100%);
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: -87px;
-  height: 100vh;
-  font-family: 'Arial', sans-serif;
+  flex: 1;
+  min-height: 0;
+  font-family: "Arial", sans-serif;
   color: white;
 }
 
@@ -18,16 +35,19 @@ body {
   width: 100%;
 }
 
-
 .form {
   display: flex;
   flex-direction: column;
   gap: 10px;
   max-width: 550px;
-  background-color: #fff;
+  background: rgba(15, 20, 35, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 50px;
   border-radius: 20px;
   position: relative;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
 }
 
 .title {
@@ -41,7 +61,8 @@ body {
   padding-left: 30px;
 }
 
-.title::before,.title::after {
+.title::before,
+.title::after {
   position: absolute;
   content: "";
   height: 16px;
@@ -63,8 +84,9 @@ body {
   animation: pulse 1s linear infinite;
 }
 
-.message, .signin {
-  color: rgba(88, 87, 87, 0.822);
+.message,
+.signin {
+  color: rgba(180, 190, 210, 0.85);
   font-size: 14px;
 }
 
@@ -94,15 +116,18 @@ body {
   width: 100%;
   padding: 10px 10px 20px 10px;
   outline: 0;
-  border: 1px solid rgba(105, 105, 105, 0.397);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  caret-color: #e2e8f0;
 }
 
 .form label .input + span {
   position: absolute;
   left: 10px;
   top: 15px;
-  color: grey;
+  color: rgba(180, 190, 210, 0.7);
   font-size: 0.9em;
   cursor: text;
   transition: 0.3s ease;
@@ -113,7 +138,8 @@ body {
   font-size: 0.9em;
 }
 
-.form label .input:focus + span,.form label .input:valid + span {
+.form label .input:focus + span,
+.form label .input:valid + span {
   top: 0px;
   font-size: 0.7em;
   font-weight: 600;
@@ -131,7 +157,7 @@ body {
   border-radius: 10px;
   color: #fff;
   font-size: 16px;
-  transform: .3s ease;
+  transform: 0.3s ease;
 }
 
 .submit:hover {
@@ -152,10 +178,9 @@ body {
 }
 
 @media screen and (max-width: 900px) {
-  body {
-    margin-top: -97px !important;
+  .registro-page {
+    padding: 20px;
   }
-  
 }
 /* Animación de fade-in */
 @keyframes fadeIn {
