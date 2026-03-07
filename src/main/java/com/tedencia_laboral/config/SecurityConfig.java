@@ -50,16 +50,18 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.OPTIONS, "/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name())).permitAll()
                         .requestMatchers(
-                                AntPathRequestMatcher.antMatcher("/users/login"),
-                                AntPathRequestMatcher.antMatcher("/users"),
-                                AntPathRequestMatcher.antMatcher("/users/register"),
-                                AntPathRequestMatcher.antMatcher("/users/check-token"),
-                                AntPathRequestMatcher.antMatcher("/user-info/**"),
-                                AntPathRequestMatcher.antMatcher("/users/delete/**"),
-                                AntPathRequestMatcher.antMatcher("/n8n/process"),
-                                AntPathRequestMatcher.antMatcher("/chat-history/**")
+                                new AntPathRequestMatcher("/users/login"),
+                                new AntPathRequestMatcher("/users/login", HttpMethod.POST.name()),
+                                new AntPathRequestMatcher("/users"),
+                                new AntPathRequestMatcher("/users/register"),
+                                new AntPathRequestMatcher("/users/register", HttpMethod.POST.name()),
+                                new AntPathRequestMatcher("/users/check-token"),
+                                new AntPathRequestMatcher("/user-info/**"),
+                                new AntPathRequestMatcher("/users/delete/**"),
+                                new AntPathRequestMatcher("/n8n/process"),
+                                new AntPathRequestMatcher("/chat-history/**")
                         )
                         .permitAll()
                         .anyRequest()
