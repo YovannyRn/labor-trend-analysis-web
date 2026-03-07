@@ -4,6 +4,7 @@ import com.tedencia_laboral.security.JwtAuthenticationFilter;
 import com.tedencia_laboral.security.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -47,15 +49,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth -> auth                        .requestMatchers(
-                                "/users/login",
-                                "/users",
-                                "/users/register",
-                                "/users/check-token",
-                                "/user-info/{userId}",
-                                "/delete/{id}",
-                                "/n8n/process",
-                                "/chat-history/**"
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.OPTIONS, "/**")).permitAll()
+                        .requestMatchers(
+                                AntPathRequestMatcher.antMatcher("/users/login"),
+                                AntPathRequestMatcher.antMatcher("/users"),
+                                AntPathRequestMatcher.antMatcher("/users/register"),
+                                AntPathRequestMatcher.antMatcher("/users/check-token"),
+                                AntPathRequestMatcher.antMatcher("/user-info/**"),
+                                AntPathRequestMatcher.antMatcher("/users/delete/**"),
+                                AntPathRequestMatcher.antMatcher("/n8n/process"),
+                                AntPathRequestMatcher.antMatcher("/chat-history/**")
                         )
                         .permitAll()
                         .anyRequest()
