@@ -12,6 +12,6 @@ export const publicGuard: CanActivateFn = (route, state) => {
     return true;
   }
 
-  router.navigate(['/backoffice']);
+  router.navigate(['/app']);
   return false;
 };
