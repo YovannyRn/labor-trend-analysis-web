@@ -57,11 +57,7 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/users"),
                                 new AntPathRequestMatcher("/users/register"),
                                 new AntPathRequestMatcher("/users/register", HttpMethod.POST.name()),
-                                new AntPathRequestMatcher("/users/check-token"),
-                                new AntPathRequestMatcher("/user-info/**"),
-                                new AntPathRequestMatcher("/users/delete/**"),
-                                new AntPathRequestMatcher("/n8n/process"),
-                                new AntPathRequestMatcher("/chat-history/**")
+                                new AntPathRequestMatcher("/users/check-token")
                         )
                         .permitAll()
                         .anyRequest()
