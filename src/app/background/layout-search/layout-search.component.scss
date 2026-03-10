@@ -539,6 +539,31 @@
   }
 }
 
+// Pantallas muy pequeñas (<480px)
+@media (max-width: 480px) {
+  .text-gradient {
+    font-size: 1.7rem !important;
+  }
+
+  .welcome-content {
+    padding: 0 0.5rem !important;
+  }
+
+  .quick-actions .btn {
+    font-size: 0.75rem !important;
+    padding: 0.4rem 0.7rem !important;
+  }
+
+  .chat-input-area {
+    padding: 0.5rem !important;
+  }
+
+  .message {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.88rem !important;
+  }
+}
+
 // Estilos responsive para móvil
 @media (max-width: 900px) {
   .chat-container {

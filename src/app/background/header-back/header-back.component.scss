@@ -291,15 +291,27 @@
 // Ajustes responsive para móvil
 @media (max-width: 900px) {
   .header {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+
     .logo {
       .logo-img {
-        margin-left: 1rem !important;
+        margin-left: 2.5rem !important;
       }
     }
 
     .user-actions {
       .username {
         display: none;
+      }
+
+      .logout-btn {
+        .logout-text {
+          display: none;
+        }
+        padding: 0.35rem 0.55rem;
+        margin-right: 0 !important;
+        margin-left: 0.4rem !important;
       }
     }
   }

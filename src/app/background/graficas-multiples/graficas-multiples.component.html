@@ -33,7 +33,7 @@
         >
           <ngx-charts-bar-vertical
             [results]="salaryByLevelData"
-            [view]="[380, 300]"
+            [view]="chartView"
             [showXAxisLabel]="true"
             [showYAxisLabel]="true"
             [xAxisLabel]="'Nivel de Experiencia'"
@@ -65,7 +65,7 @@
         >
           <ngx-charts-pie-chart
             [results]="salaryByRegionData"
-            [view]="[380, 300]"
+            [view]="chartView"
             [legend]="true"
             [scheme]="regionColorScheme"
             [tooltipDisabled]="false"
@@ -93,7 +93,7 @@
         >
           <ngx-charts-bar-horizontal
             [results]="skillsData"
-            [view]="[380, 300]"
+            [view]="chartView"
             [showXAxisLabel]="true"
             [showYAxisLabel]="true"
             [xAxisLabel]="'Salario Promedio (COP)'"

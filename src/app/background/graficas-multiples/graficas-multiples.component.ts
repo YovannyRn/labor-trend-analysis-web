@@ -3,6 +3,7 @@ import {
   Input,
   Output,
   EventEmitter,
+  HostListener,
   OnChanges,
   OnInit,
   SimpleChanges,
@@ -49,6 +50,24 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
   salaryByRegionData: any[] = [];
   skillsData: any[] = [];
   trendsInfo: any = {};
+  chartView: [number, number] = [380, 300];
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.updateChartView();
+  }
+
+  private updateChartView(): void {
+    const w = window.innerWidth;
+    if (w < 576) {
+      const width = Math.min(w - 48, 320);
+      this.chartView = [width, Math.round(width * 0.7)];
+    } else if (w < 992) {
+      this.chartView = [Math.min(w - 64, 460), 300];
+    } else {
+      this.chartView = [380, 300];
+    }
+  }
 
 
   Object = Object;
@@ -74,6 +93,7 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
     domain: ['#FF5722', '#009688', '#9C27B0', '#FF9800', '#4CAF50'],
   };
   ngOnInit() {
+    this.updateChartView();
     if (this.dynamicData) {
       this.processGraphData();
     }
