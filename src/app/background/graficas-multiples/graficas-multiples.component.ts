@@ -45,7 +45,6 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
   @Input() dynamicData: any = null;
   @Output() close = new EventEmitter<void>();
 
-
   salaryByLevelData: any[] = [];
   salaryByRegionData: any[] = [];
   skillsData: any[] = [];
@@ -68,7 +67,6 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
       this.chartView = [380, 300];
     }
   }
-
 
   Object = Object;
 
@@ -111,13 +109,11 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
     }
 
     try {
-
       let dataToProcess: any = null;
       let dataFound = false;
 
       if (this.isN8nResponse(this.dynamicData)) {
         dataToProcess = this.extractDataFromN8nResponse(this.dynamicData);
-
       } else if (this.hasDirectGraphStructure(this.dynamicData)) {
         dataToProcess = this.dynamicData;
       } else if (this.dynamicData.data) {
@@ -128,9 +124,7 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
 
       // Búsqueda profunda en la estructura
       if (dataToProcess && typeof dataToProcess === 'object') {
-
         if (this.dynamicData.structured_data) {
-
           if (this.isValidGraphData(this.dynamicData.structured_data)) {
             dataToProcess = this.dynamicData.structured_data;
             dataFound = true;
@@ -163,7 +157,7 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
           'No se encontraron datos válidos en la estructura principal:',
           typeof this.dynamicData === 'object'
             ? Object.keys(this.dynamicData)
-            : typeof this.dynamicData
+            : typeof this.dynamicData,
         );
 
         this.createSampleDataFromResponse(this.dynamicData);
@@ -173,7 +167,6 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
     }
   }
 
- 
   private isN8nResponse(data: any): boolean {
     return (
       data &&
@@ -186,10 +179,8 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
   }
 
   private extractDataFromN8nResponse(response: any): any {
-
     // Verificar específicamente la estructura del caso real (structured_data.data)
     if (response.structured_data && response.structured_data.data) {
-
       if (this.isValidGraphData(response.structured_data.data)) {
         return response.structured_data.data;
       }
@@ -197,19 +188,15 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
 
     // Try structured_data first
     if (response.structured_data) {
-
       if (this.isValidGraphData(response.structured_data)) {
         return response.structured_data;
       } else if (typeof response.structured_data === 'object') {
-
         // Verificar si hay datos anidados más profundos
         for (const key in response.structured_data) {
           if (
             typeof response.structured_data[key] === 'object' &&
             response.structured_data[key] !== null
           ) {
-
-
             if (this.isValidGraphData(response.structured_data[key])) {
               return response.structured_data[key];
             }
@@ -230,7 +217,6 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
         }
       } catch (e) {
         console.log('Error al parsear output:', e);
-   
       }
     }
 
@@ -248,15 +234,12 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
 
     // Intentar buscar directamente en la raíz
     if (this.isValidGraphData(response)) {
-  
       return response;
     }
-
 
     return null;
   }
 
- 
   private hasDirectGraphStructure(data: any): boolean {
     return (
       data &&
@@ -267,7 +250,7 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
         data.tendencia_salarial)
     );
   }
-  
+
   private isValidGraphData(data: any): boolean {
     if (!data || typeof data !== 'object') {
       return false;
@@ -299,17 +282,14 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
       return true;
     }
 
-    if (
-      data.tendencia_salarial &&
-      typeof data.tendencia_salarial === 'object'
-    ) 
-    for (const key in data) {
-      if (typeof data[key] === 'object' && data[key] !== null) {
-        if (this.isValidGraphData(data[key])) {
-          return true;
+    if (data.tendencia_salarial && typeof data.tendencia_salarial === 'object')
+      for (const key in data) {
+        if (typeof data[key] === 'object' && data[key] !== null) {
+          if (this.isValidGraphData(data[key])) {
+            return true;
+          }
         }
       }
-    }
 
     return false;
   }
@@ -358,11 +338,11 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
             (regionData: any) => ({
               name: regionData.region,
               value: regionData.salario_promedio,
-            })
+            }),
           );
         } else {
           this.salaryByRegionData = Object.entries(
-            sourceData.datos_por_region
+            sourceData.datos_por_region,
           ).map(([region, salary]) => ({
             name: region,
             value: Number(salary),
@@ -391,7 +371,7 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
                 `Habilidad ${index + 1}`,
               value: Number(salaryValue),
             };
-          }
+          },
         );
       }
 
@@ -429,18 +409,16 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
   }
   formatTooltip = (data: any) => {
     return `${data.name}: ${this.formatCurrency(data.value)}`;
-  }; 
+  };
   hasKeys(obj: any): boolean {
     return obj && Object.keys(obj).length > 0;
   }
 
- 
   closeCharts() {
     this.close.emit();
   }
 
   private createSampleDataFromResponse(response: any): void {
-
     try {
       const responseType = response.response_type || 'salary_data';
       const message = response.message || '';
@@ -539,7 +517,7 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
           for (const [sector, keywords] of Object.entries(sectors)) {
             if (
               keywords.some((keyword) =>
-                textToAnalyze.toLowerCase().includes(keyword)
+                textToAnalyze.toLowerCase().includes(keyword),
               )
             ) {
               sectorDetected = sector;
@@ -547,17 +525,14 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
             }
           }
         } catch (error) {
-          console.warn(
-            'Error al analizar texto para detectar sector:',
-            error
-          );
+          console.warn('Error al analizar texto para detectar sector:', error);
         }
       }
 
       if (!sectorDetected) {
         sectorDetected = 'general';
         console.log(
-          '⚠️ No se detectó sector específico, usando datos generales'
+          '⚠️ No se detectó sector específico, usando datos generales',
         );
       }
 
@@ -683,19 +658,19 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
           name: 'Junior',
           value:
             sectorConfig.junior.min +
-           (sectorConfig.junior.max - sectorConfig.junior.min),
+            (sectorConfig.junior.max - sectorConfig.junior.min),
         },
         {
           name: 'Mid-Level',
           value:
             sectorConfig.mid.min +
-           (sectorConfig.mid.max - sectorConfig.mid.min),
+            (sectorConfig.mid.max - sectorConfig.mid.min),
         },
         {
           name: 'Senior',
           value:
             sectorConfig.senior.min +
-           (sectorConfig.senior.max - sectorConfig.senior.min),
+            (sectorConfig.senior.max - sectorConfig.senior.min),
         },
       ];
 
@@ -708,7 +683,7 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
         const baseValue = (sectorConfig.junior.max + sectorConfig.mid.min) / 2;
         this.salaryByRegionData.push({
           name: sectorConfig.regions[i],
-          value: baseValue +baseValue * 0.8,
+          value: baseValue + baseValue * 0.8,
         });
       }
 
@@ -719,10 +694,7 @@ export class GraficasMultiplesComponent implements OnInit, OnChanges {
           (sectorConfig.mid.max - sectorConfig.mid.min) / 2;
         this.skillsData.push({
           name: sectorConfig.skills[i],
-          value:
-            baseValue +
-           baseValue * 0.5 -
-            i * (baseValue * 0.05),
+          value: baseValue + baseValue * 0.5 - i * (baseValue * 0.05),
         });
       }
 
