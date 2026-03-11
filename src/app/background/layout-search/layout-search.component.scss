@@ -1,5 +1,6 @@
 .chat-container {
-  height: calc(100vh - 62px);
+  height: calc(100vh - 56px);
+  height: calc(100dvh - 56px);
   font-family:
     "Inter",
     -apple-system,
@@ -206,8 +207,8 @@
 }
 
 .message-content {
-  font-size: 1rem;
-  line-height: 1.75;
+  font-size: 0.95rem;
+  line-height: 1.65;
   color: #3a4458;
 
   b {
@@ -561,6 +562,38 @@
   .message {
     padding: 0.5rem 0.75rem !important;
     font-size: 0.88rem !important;
+  }
+}
+
+// Mensajes y input compactos en móvil
+@media (max-width: 900px) {
+  .message-content {
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .bot-message .message-content,
+  .user-message .message-content {
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .chat-input-bar {
+    padding: 0.5rem 0.75rem !important;
+    padding-bottom: max(0.6rem, env(safe-area-inset-bottom, 0.6rem)) !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  .chat-input-field {
+    font-size: 0.875rem !important;
+    min-height: 42px !important;
+    padding: 0.65rem 3rem 0.65rem 0.9rem !important;
+  }
+
+  .quick-btn {
+    font-size: 0.75rem !important;
+    padding: 4px 12px !important;
   }
 }
 

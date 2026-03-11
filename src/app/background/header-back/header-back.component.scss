@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.45rem 2rem;
+  padding: 0.4rem 1.25rem;
   background: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
   color: #1a2233;
@@ -48,7 +48,7 @@
   .user-actions {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
     position: relative;
 
     .username {
@@ -199,13 +199,15 @@
       background: transparent;
       color: #e63946;
       border: 1px solid #f5c2c5;
-      padding: 0.35rem 1rem;
+      padding: 0.3rem 0.85rem;
       border-radius: 9999px;
       cursor: pointer;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 500;
       letter-spacing: 0.01em;
       transition: all 0.2s ease;
+      margin-left: 0.25rem;
+      white-space: nowrap;
 
       &:hover {
         border-color: #e63946;
@@ -288,39 +290,80 @@
   }
 }
 
+// Logo img: espacio para el botón hamburguesa absoluto (left: 1rem)
+.logo .logo-img {
+  margin-left: 2.6rem;
+}
+
 // Ajustes responsive para móvil
 @media (max-width: 900px) {
   .header {
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
+    padding: 0.35rem 0.6rem !important;
 
     .logo {
+      gap: 0.3rem;
+
       .logo-img {
-        margin-left: 2.5rem !important;
+        height: 24px !important;
+        margin-left: 2.6rem !important;
+      }
+
+      span {
+        font-size: 0.88rem;
       }
     }
 
     .user-actions {
+      gap: 0.2rem;
+
       .username {
         display: none;
+      }
+
+      .user-icon {
+        font-size: 0.82rem !important;
+        padding: 0.22rem 0.38rem !important;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .logout-btn {
         .logout-text {
           display: none;
         }
-        padding: 0.35rem 0.55rem;
-        margin-right: 0 !important;
-        margin-left: 0.4rem !important;
+        padding: 0 !important;
+        width: 28px;
+        height: 28px;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        margin: 0 !important;
+        font-size: 0.88rem;
+
+        i {
+          margin: 0 !important;
+        }
       }
     }
   }
 }
 
+@media (max-width: 900px) {
+  .theme-toggle-btn {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.78rem !important;
+  }
+}
+
 // Botón toggle de tema
 .theme-toggle-btn {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;

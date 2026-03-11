@@ -9,6 +9,11 @@ body {
   background-color: #0d1117;
 }
 
+/* Fix iOS safe area — evita espacio blanco inferior en móvil */
+body {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
 * {
   font-family:
     "Inter",
