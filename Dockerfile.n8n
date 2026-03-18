@@ -1,0 +1,7 @@
+FROM n8nio/n8n:latest
+
+# n8n corre en el puerto 5678 por defecto
+EXPOSE 5678
+
+# Render inyecta PORT, n8n lo usa via N8N_PORT
+ENV N8N_PORT=${PORT:-5678}
