@@ -58,7 +58,8 @@ public class SecurityConfig {
                     new AntPathRequestMatcher("/users/register"),
                     new AntPathRequestMatcher("/users/register", HttpMethod.POST.name()),
                     new AntPathRequestMatcher("/users/check-token"),
-                    new AntPathRequestMatcher("/health")
+                    new AntPathRequestMatcher("/health"),
+                    new AntPathRequestMatcher("/api/health")
                 )
                 .permitAll()
                 .anyRequest()
