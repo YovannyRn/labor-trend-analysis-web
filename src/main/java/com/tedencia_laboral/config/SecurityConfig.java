@@ -48,22 +48,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter) throws Exception {
         http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name())).permitAll()
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/users/login"),
-                                new AntPathRequestMatcher("/users/login", HttpMethod.POST.name()),
-                                new AntPathRequestMatcher("/users"),
-                                new AntPathRequestMatcher("/users/register"),
-                                new AntPathRequestMatcher("/users/register", HttpMethod.POST.name()),
-                                new AntPathRequestMatcher("/users/check-token")
-                        )
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name())).permitAll()
+                .requestMatchers(
+                    new AntPathRequestMatcher("/users/login"),
+                    new AntPathRequestMatcher("/users/login", HttpMethod.POST.name()),
+                    new AntPathRequestMatcher("/users"),
+                    new AntPathRequestMatcher("/users/register"),
+                    new AntPathRequestMatcher("/users/register", HttpMethod.POST.name()),
+                    new AntPathRequestMatcher("/users/check-token"),
+                    new AntPathRequestMatcher("/health")
+                )
+                .permitAll()
+                .anyRequest()
+                .authenticated())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
